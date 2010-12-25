@@ -30,8 +30,10 @@ def log(record):
   f.write('\n')
   f.close()
 def fixupTitle():
-  showTitle = sys.argv[1].lower().replace(' ', '_')
-  showTitle = sys.argv[1].replace('-', '_')
+  showTitle = sys.argv[1]
+  showTitle = showTitle.lower()
+  showTitle = showTitle.replace(' ', '_')
+  showTitle = showTitle.replace('-', '_')
   showTitle = showTitle.replace(':', '')
   showTitle = re.sub('^the_', '', showTitle)
   showTitle = re.sub('two_and_a_half_men', 'two_half_men', showTitle)
