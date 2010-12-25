@@ -31,6 +31,7 @@ def log(record):
   f.close()
 def fixupTitle():
   showTitle = sys.argv[1].lower().replace(' ', '_')
+  showTitle = sys.argv[1].replace('-', '_')
   showTitle = showTitle.replace(':', '')
   showTitle = re.sub('^the_', '', showTitle)
   showTitle = re.sub('two_and_a_half_men', 'two_half_men', showTitle)
@@ -85,8 +86,8 @@ if (len(sys.argv) == 1):
 REQUEST_TOKEN_URL = 'http://api.getglue.com/oauth/request_token'
 AUTHORIZATION_URL = 'http://getglue.com/oauth/authorize'
 ACCESS_TOKEN_URL = 'http://api.getglue.com/oauth/access_token'
-CONSUMER_KEY = '******************************'
-CONSUMER_SECRET = '*******************************'
+CONSUMER_KEY = 'REQUEST YOUR OWN KEY - EMAIL api@getglue.com'
+CONSUMER_SECRET = 'REQUEST YOUR OWN KEY - EMAIL api@getglue.com'
 OAUTH_HOLDER_FILE = os.path.expanduser('~') + '/.MythTVGetGlueCheckin'
 LOG_FILE = os.path.expanduser('~') + '/MythTVGetGlueCheckin.log'
 
