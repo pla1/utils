@@ -15,6 +15,9 @@ The syntax for the event should be something like:
 
 /usr/bin/python /home/htplainf/MythTVGetGlueCheckin4.py '%TITLE%'
 
+Here is my blog entry for more info: 
+http://platechnotes.patrickarchibald.com/2010/12/checking-in-at-getglue-with-mythtv.html
+
 """
 import os.path
 import sys
