@@ -78,7 +78,7 @@ def write2DB(status):
   if row == None:
     print(msg)
     cursor.execute("""insert into mentions (msg, logtime) value(%s,current_timestamp())""", msg)
-    subject = "Twitter mention - " + status.author.screen_name  + ": " + msg
+    subject = "Twitter mention by " + status.author.screen_name  + ": " + msg
     sendMail(subject, subject + " http://twitter.com/replies");
   cursor.close()
 CONSUMER_KEY = '**************************'
