@@ -2,6 +2,9 @@
 #
 # Email new Twitter mentions.
 # Prerequisites: Mysql, Tweepy.
+# Register this app here: http://twitter.com/apps/new
+# Replaces the asterisks with your values.
+# Version 2.1 December 26, 2010 - PLA - Add screen name to email subject and body.
 # Version 2.0 November 20, 2010
 #
 #
@@ -16,9 +19,9 @@ import smtplib
 import tweepy
 
 def sendMail(subject, text):
-  gmailUser = '**YOUR_USER_NAME@gmail.com**'
-  gmailPassword = '**YOUR_PASSWORD**'
-  recipient = '**YOUR_USER_NAME@gmail.com**'
+  gmailUser = '********************@gmail.com'
+  gmailPassword = '********************'
+  recipient = '*********************@gmail.com'
   msg = MIMEMultipart()
   msg['From'] = gmailUser
   msg['To'] = recipient
@@ -66,7 +69,8 @@ def createDatabaseTables():
   cursor.execute(SQL_CREATE_MENTIONS_TABLE)
   cursor.execute(SQL_CREATE_OAUTH_TABLE)
   cursor.close()
-def write2DB(msg):
+def write2DB(status):
+  msg = status.text.replace("'", "\"")
   msg = msg.encode('utf-8')
   cursor = conn.cursor()
   cursor.execute("""Select id from mentions where msg = %s""", msg)
@@ -74,11 +78,12 @@ def write2DB(msg):
   if row == None:
     print(msg)
     cursor.execute("""insert into mentions (msg, logtime) value(%s,current_timestamp())""", msg)
-    sendMail("Twitter mention - " + msg, msg + " http://twitter.com/replies");
+    subject = "Twitter mention - " + status.author.screen_name  + ": " + msg
+    sendMail(subject, subject + " http://twitter.com/replies");
   cursor.close()
-CONSUMER_KEY = 'Lo2csqv5LY8fxxAIFEPSjA'
-CONSUMER_SECRET = 'pBYdypkbaxV4VpaB84SfoyUjvOZOfSEaanpClLeAg'
-conn = MySQLdb.connect (host="localhost", user="**YOUR_DB_USER_NAME**", passwd="**YOUR_DB_PASSWORD**", db="**YOUR_DB_NAME**")
+CONSUMER_KEY = '**************************'
+CONSUMER_SECRET = '***********************************'
+conn = MySQLdb.connect (host="localhost", user="**********************", passwd="********************", db="****************")
 createDatabaseTables();
 readOauth()
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -87,7 +92,7 @@ api = tweepy.API(auth)
 while (True):
   list = api.mentions()
   for status in list:
-    write2DB(status.text.replace("'", "\""))
+    write2DB(status)
   print("Sleeping " +  str(datetime.datetime.now()))
   time.sleep(60 * 10)
   print("Awake")
