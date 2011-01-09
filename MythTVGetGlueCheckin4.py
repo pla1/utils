@@ -35,11 +35,14 @@ def log(record):
 def fixupTitle():
   showTitle = sys.argv[1]
   showTitle = showTitle.lower()
+  showTitle = showTitle.replace(' & ', '_')
   showTitle = showTitle.replace(' ', '_')
   showTitle = showTitle.replace('-', '_')
   showTitle = showTitle.replace(':', '')
   showTitle = re.sub('^the_', '', showTitle)
   showTitle = re.sub('two_and_a_half_men', 'two_half_men', showTitle)
+  showTitle = re.sub('kimora_life_in_the_fab_lane', 'kimora_life_in_fab_lane', showTitle)
+  showTitle = re.sub('brandy_ray_j_a_family_business', 'brandy_ray_j_family_business', showTitle)
   return showTitle
 def oauthRoutine():
   consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
