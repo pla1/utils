@@ -7,6 +7,9 @@
 #
 # NOTE: This script must run with root privaleges because of the ngrep command. 
 #
+# GIT URL for this script: git://github.com/pla1/utils.git
+# GIT URL for youtube-dl: https://github.com/rg3/youtube-dl/
+# This script based off of this: https://github.com/tlvince/ytmp
 
 INTERFACE=eth0
 

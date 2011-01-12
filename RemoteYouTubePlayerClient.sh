@@ -8,6 +8,10 @@
 #
 # NOTE: This script will fail if the YouTube video ID 
 #       contains a dash. For example: id=-s-pxB7kIsQ
+#
+# GIT URL for this script: git://github.com/pla1/utils.git
+# GIT URL for youtube-dl: https://github.com/rg3/youtube-dl/
+# This script based off of this: https://github.com/tlvince/ytmp
 
 lastid=""
 echo "Waiting for download links..."
