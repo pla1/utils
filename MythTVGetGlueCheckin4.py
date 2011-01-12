@@ -32,7 +32,7 @@ def log(record):
   f.write(record)
   f.write('\n')
   f.close()
-def fixupTitle():
+def /home/htplainf/utils/.git/index.lock():
   showTitle = sys.argv[1]
   showTitle = showTitle.lower()
   showTitle = showTitle.replace(' & ', '_')
