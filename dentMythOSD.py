@@ -26,7 +26,6 @@ def write2DB(msg):
 	if row == None:
 		print("Not in dents table:" + msg)
 		cursor.execute("""insert into dents (msg, logtime) values(%s,current_timestamp())""",msg)
-		cursor.execute("""insert into dents (msg, logtime) values('test',current_timestamp())""")
                 command = "mythutil --message --timeout 3 --bcastaddr 0.0.0.0  --message_text '" + msg + "'" 
 		print command
 		commands.getstatusoutput(command)
@@ -43,7 +42,6 @@ TWITTER_URL = "http://search.twitter.com/search.atom?q="+HASHTAG
 #IDENTICA_URL = "http://identi.ca/api/statuses/friends_timeline/" + USER + ".rss"
 IDENTICA_URL = "http://identi.ca/search/notice/rss?q="+HASHTAG
 SQL_CREATE_TABLE = "create table dents ( id mediumint not null auto_increment, msg text, logtime datetime,  primary key(id));"
-#SQL_CREATE_TABLE = "create table dents ( id mediumint not null auto_increment, msg char(200) not null, logtime datetime not null,  primary key(id));"
 SQL_DROP_TABLE = "drop table if exists dents"
 
 conn = MySQLdb.connect("localhost","USERNAME","PASSWORD","DATABASENAME")
