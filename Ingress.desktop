@@ -1,0 +1,64 @@
+[Desktop Entry]
+Name=Ingress
+Type=Application
+# I put the icon file in ~/.local/share/icons
+Icon=ingress.png
+Exec=xdg-open http://www.ingress.com/intel?ll=33.180154,-79.998748&z=12
+
+X-Ayatana-Desktop-Shortcuts=SC_Aiken;SC_Charleston;SC_Columbia;SC_Conway;SC_Hilton_Head;SC_Moncks_Corner;SC_Myrtle_Beach;SC_Union;GA_Augusta;GA_Tybee_Island;NC_Southport
+
+[SC_Aiken Shortcut Group]
+Name=SC Aiken
+Exec=xdg-open http://www.ingress.com/intel?ll=33.551783,-81.733456&z=13
+OnlyShowIn=Unity
+
+[SC_Charleston Shortcut Group]
+Name=SC Charleston
+Exec=xdg-open http://www.ingress.com/intel?ll=32.821176,-79.970478&z=11
+OnlyShowIn=Unity
+
+[SC_Columbia Shortcut Group]
+Name=SC Columbia
+Exec=xdg-open http://www.ingress.com/intel?ll=34.009106,-81.058415&z=11
+OnlyShowIn=Unity
+
+[SC_Conway Shortcut Group]
+Name=SC Conway
+Exec=xdg-open http://www.ingress.com/intel?ll=33.842536,-79.05945&z=13
+OnlyShowIn=Unity
+
+[SC_Hilton_Head Shortcut Group]
+Name=SC Hilton Head
+Exec=xdg-open http://www.ingress.com/intel?ll=32.189529,-80.750362&z=12
+OnlyShowIn=Unity
+
+[SC_Moncks_Corner Shortcut Group]
+Name=SC Moncks Corner
+Exec=xdg-open http://www.ingress.com/intel?ll=33.180154,-79.998748&z=12
+OnlyShowIn=Unity
+
+[SC_Myrtle_Beach Shortcut Group]
+Name=SC Myrtle Beach
+Exec=xdg-open http://www.ingress.com/intel?ll=33.702926,-78.951249&z=12
+OnlyShowIn=Unity
+
+[SC_Union Shortcut Group]
+Name=SC Union
+Exec=xdg-open http://www.ingress.com/intel?ll=34.715127,-81.624078&z=17
+OnlyShowIn=Unity
+
+[GA_Tybee_Island Shortcut Group]
+Name=GA Tybee Island
+Exec=xdg-open http://www.ingress.com/intel?ll=32.006873,-80.862128&z=14
+OnlyShowIn=Unity
+
+[NC_Southport Shortcut Group]
+Name=NC Southport
+Exec=xdg-open http://www.ingress.com/intel?ll=33.917926,-78.018947&z=17
+OnlyShowIn=Unity
+
+[GA_Augusta Shortcut Group]
+Name=GA Augusta
+Exec=xdg-open http://www.ingress.com/intel?ll=33.476726,-81.9941&z=12
+OnlyShowIn=Unity
+
