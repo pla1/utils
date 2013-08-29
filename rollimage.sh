@@ -1,4 +1,5 @@
 #!/bin/bash
+# Create animated GIF with the Ubuntu logo.
 cd /mnt/disk0/tmp
 j=0
 rm _ubuntu*.png
