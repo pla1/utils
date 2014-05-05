@@ -68,7 +68,7 @@ then
 		buildChannelMap
 	done
 fi
-TUNER=2
+TUNER=1
 HDHOMERUN=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $1}' | head -1)
 CHANNEL=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $2}'| head -1)
 PROGRAM=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $3}'| head -1)
