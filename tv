@@ -1,21 +1,12 @@
-#.chann!/bin/bash
+#!/bin/bash
 # View HDHomeRun channel. Builds a channel map, searches for passed channel letters, tunes HDHomeRun to channel program and send to mplayer.
 #
 function buildChannelMap() {
-	log "Building channel map file $CHANNELMAP_FILE"
-	RAW_CHANNEL_MAP_FILE="/tmp/channels.txt"
-	if [[ -f $CHANNELMAP_FILE ]];
-	then
-		rm $CHANNELMAP_FILE
-	fi
-	if [[ ! -f $RAW_CHANNEL_MAP_FILE ]];
-	then
-		log "Scanning HDHomeRun unit $HDHOMERUN. This will take some time."
-        	hdhomerun_config $HDHOMERUN scan /tuner0 $RAW_CHANNEL_MAP_FILE
-	fi
+	log "Scanning HDHomeRun unit $HDHOMERUN. This will take some time."
+        hdhomerun_config $HDHOMERUN scan /tuner0 $RAW_CHANNELMAP_FILE
 	while read line
 	do
-		TEMP=$(echo "$line" | awk -F"$CHANNELMAP:|\)" '{print $2}')
+		TEMP=$(echo "$line" | awk -F"$CHANNELMAP:|)" '{print $2}')
 		if [[ ! -z "$TEMP" ]];
 		then
 			CHANNEL_NUMBER="$TEMP"
@@ -25,22 +16,29 @@ function buildChannelMap() {
 			PROGRAM_NUMBER=$(echo "$line" | awk -F"^PROGRAM " '{print $2}' | awk -F":" '{print $1}')
 			if [[ ! -z "$PROGRAM_NUMBER" ]];
 			then
-				CHANNEL_NAME=$(echo "$line" | awk -F"^PROGRAM [0-9]+: [0-9]+ *" '{print $2}' | cut -d' ' -f1)
-				echo "Channel number: $CHANNEL_NUMBER program number: $PROGRAM_NUMBER channel name: $CHANNEL_NAME"
-				echo "$CHANNEL_NUMBER|$PROGRAM_NUMBER|$CHANNEL_NAME" >> $CHANNELMAP_FILE
+				CHANNEL_NAME=$(echo "$line" | awk -F"^PROGRAM [0-9]+: [0-9.]+ *" '{print $2}' | cut -d' ' -f1)
+				echo "HDHomerun: $HDHOMERUN Channel number: $CHANNEL_NUMBER program number: $PROGRAM_NUMBER channel name: $CHANNEL_NAME"
+				echo "$HDHOMERUN|$CHANNEL_NUMBER|$PROGRAM_NUMBER|$CHANNEL_NAME" >> $CHANNELMAP_FILE
 			fi
 		fi
-	done < $RAW_CHANNEL_MAP_FILE
-	exit
+	done < $RAW_CHANNELMAP_FILE
+        log "Scan of HDHomerun device $HDHOMERUN complete."
 }
 function log() {
-	echo $1
+	printf "\n*\n*$1\n*\n"
 	logger "$0 $1"
 }
 function checkInstalledSoftware {
 	hash hdhomerun_config 2>/dev/null || { log "I require command 'hdhomerun_config' but it's not installed. If on a debian system try 'sudo apt-get install hdhomerun_config'.  Aborting.";exit 1; }
 }
-
+function setAndView {
+	log "Setting HDHomeRun device: $HDHOMERUN to channel: $CHANNEL program: $PROGRAM"
+	hdhomerun_config $HDHOMERUN set /tuner$TUNER/channel $CHANNEL
+	hdhomerun_config $HDHOMERUN set /tuner$TUNER/program $PROGRAM
+	hdhomerun_config $HDHOMERUN save /tuner$TUNER - | mplayer -geometry 800x450 -
+	hdhomerun_config $HDHOMERUN set /tuner$TUNER/channel none
+	exit
+}
 
 if [[ -z "$1" ]];
 then
@@ -49,34 +47,35 @@ then
 fi
 SEARCH_TEXT="$1"
 checkInstalledSoftware
-HDHOMERUN=`hdhomerun_config discover | cut -f3 -d' '`
-if [[ -z "$HDHOMERUN" ]];
+HDHOMERUNS=`hdhomerun_config discover | cut -f3 -d' '`
+CHANNELMAP_FILE="$HOME/.tvChannelMap"
+if [[ -z "$HDHOMERUNS" ]];
 then
 	log "Did not find any HDHomerun devices on this network using the 'hdhomerun_config' discover command."
 	exit 1
 fi
-CHANNELMAP=`hdhomerun_config $HDHOMERUN get /tuner0/channelmap`
-CHANNELMAP_FILE="$HOME/.channelmap_$HDHOMERUN"
 if [[ ! -f $CHANNELMAP_FILE ]];
 then
 	log "Channel map file $CHANNELMAP_FILE not found. Going to build."
-	buildChannelMap
+	RAW_CHANNELMAP_FILE="/tmp/channels.txt"
+	if [[ -f $RAW_CHANNELMAP_FILE ]];
+	then
+		rm $RAW_CHANNELMAP_FILE
+	fi
+	for HDHOMERUN in $HDHOMERUNS; do
+		log "HDHomerun ID: $HDHOMERUN"
+		CHANNELMAP=`hdhomerun_config $HDHOMERUN get /tuner0/channelmap`
+		buildChannelMap
+	done
 fi
-TUNER=0
-CHANNEL=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $1}')
-PROGRAM=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $2}')
-if [[ -z "$CHANNEL" ]];
+TUNER=2
+HDHOMERUN=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $1}' | head -1)
+CHANNEL=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $2}'| head -1)
+PROGRAM=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $3}'| head -1)
+if [[ -z "$CHANNEL" && -z "$PROGRAM" && -z "$HDHOMERUN" ]];
 then
-	log "Channel not found. You passed '$SEARCH_TEXT'"
-	exit
+	log "Channel not found in channel map file $CHANNELMAP_FILE. You passed '$SEARCH_TEXT'"
+	exit 1
 fi
-if [[ -z "$PROGRAM" ]];
-then
-        log "Program number not found. You passed '$SEARCH_TEXT'"
-        exit
-fi
-echo "Setting HDHomeRun device: $HDHOMERUN to channel: $CHANNEL program: $PROGRAM"
-hdhomerun_config $HDHOMERUN set /tuner$TUNER/channel $CHANNEL
-hdhomerun_config $HDHOMERUN set /tuner$TUNER/program $PROGRAM
-hdhomerun_config $HDHOMERUN save /tuner$TUNER - | mplayer -geometry 800x450 -
-hdhomerun_config $HDHOMERUN set /tuner$TUNER/channel none
+setAndView
+exit
