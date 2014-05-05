@@ -37,7 +37,6 @@ function setAndView {
 	hdhomerun_config $HDHOMERUN set /tuner$TUNER/program $PROGRAM
 	hdhomerun_config $HDHOMERUN save /tuner$TUNER - | mplayer -geometry 800x450 -
 	hdhomerun_config $HDHOMERUN set /tuner$TUNER/channel none
-	exit
 }
 
 if [[ -z "$1" ]];
