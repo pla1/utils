@@ -1,4 +1,4 @@
-#!/bin/bash
+#.chann!/bin/bash
 # View HDHomeRun channel. Builds a channel map, searches for passed channel letters, tunes HDHomeRun to channel program and send to mplayer.
 #
 function buildChannelMap() {
@@ -63,8 +63,8 @@ then
 	buildChannelMap
 fi
 TUNER=0
-CHANNEL=$(cat .channelmap_$HDHOMERUN | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $1}')
-PROGRAM=$(cat .channelmap_$HDHOMERUN | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $2}')
+CHANNEL=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $1}')
+PROGRAM=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $2}')
 if [[ -z "$CHANNEL" ]];
 then
 	log "Channel not found. You passed '$SEARCH_TEXT'"
