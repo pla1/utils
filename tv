@@ -29,7 +29,7 @@ function log() {
 	logger "$0 $1"
 }
 function checkInstalledSoftware {
-	hash hdhomerun_config 2>/dev/null || { log "I require command 'hdhomerun_config' but it's not installed. If on a debian system try 'sudo apt-get install hdhomerun_config'.  Aborting.";exit 1; }
+	hash hdhomerun_config 2>/dev/null || { log "This script requires command 'hdhomerun_config' but it's not installed. If on a debian system try 'sudo apt-get install hdhomerun-config'.  Aborting.";exit 1; }
 }
 function setAndView {
 	log "Setting HDHomeRun device: $HDHOMERUN to channel: $CHANNEL program: $PROGRAM"
