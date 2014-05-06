@@ -6,7 +6,7 @@ function buildChannelMap() {
         hdhomerun_config $HDHOMERUN scan /tuner0 $RAW_CHANNELMAP_FILE
 	while read line
 	do
-		TEMP=$(echo "$line" | awk -F"$CHANNELMAP:|)" '{print $2}')
+		TEMP=$(echo "$line" | awk -F"$CHANNELMAP:|\)" '{print $2}')
 		if [[ ! -z "$TEMP" ]];
 		then
 			CHANNEL_NUMBER="$TEMP"
