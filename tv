@@ -11,7 +11,7 @@
 ###############################
 function build_channel_map() {
   log "Scanning HDHomeRun unit $HDHOMERUN. This will take some time."
-  hdhomerun_config $HDHOMERUN scan /tuner0 $RAW_CHANNELMAP_FILE
+  hdhomerun_config $HDHOMERUN scan /$TUNER $RAW_CHANNELMAP_FILE
   while read line
   do
     TEMP=$(echo "$line" | awk -F"$CHANNELMAP:|\)" '{print $2}')
@@ -50,8 +50,30 @@ function log() {
 # Arguments: None
 # Returns: None
 ###############################
-function checkInstalledSoftware {
+function check_installed_software() {
   hash hdhomerun_config 2>/dev/null || { log "This script requires command 'hdhomerun_config' but it's not installed. If on a debian system try 'sudo apt-get install hdhomerun-config'.  Aborting.";exit 1; }
+}
+
+###############################
+# Get highest tuner number that is not busy
+# Globals: HDHOMERUN, TUNER
+# Arguments: None
+# Returns: None
+###############################
+function set_highest_tuner_number() {
+  highest_tuner_number=-1
+  for (( c=0; c<=5; c++ ))
+  do
+    RESULT=$(hdhomerun_config $HDHOMERUN get /tuner$c/status)
+    if [[ "$RESULT" =~ "ch=" ]]; then
+      highest_tuner_number=$c
+    fi   	
+  done
+  if [[ $highest_tuner_number = -1 ]]; then
+    log "No available tuners found for $HDHOMERUN"
+    exit -1
+  fi
+  TUNER=$highest_tuner_number
 }
 
 ###############################
@@ -60,8 +82,8 @@ function checkInstalledSoftware {
 # Arguments: None
 # Returns: None
 ###############################
-function setAndView {
-  log "Setting HDHomeRun device: $HDHOMERUN to channel: $CHANNEL program: $PROGRAM"
+function set_and_view() {
+  log "Setting HDHomeRun device: $HDHOMERUN to channel: $CHANNEL program: $PROGRAM tuner number: $TUNER"
   hdhomerun_config $HDHOMERUN set /tuner$TUNER/channel $CHANNEL
   hdhomerun_config $HDHOMERUN set /tuner$TUNER/program $PROGRAM
   hdhomerun_config $HDHOMERUN save /tuner$TUNER - | mplayer -geometry 800x450 -
@@ -71,44 +93,42 @@ function setAndView {
 ###############################
 # Main routine. 
 ###############################
-function main {
-  if [[ -z "$1" ]];
-  then
+function main() {
+  if [[ -z "$1" ]]; then
     log "Please pass some text to search the channel map with. For example: 'tv cnn'"
     exit 1
   fi
-  checkInstalledSoftware
+  check_installed_software
   readonly SEARCH_TEXT="$1"
   readonly HDHOMERUNS=`hdhomerun_config discover | cut -f3 -d' '`
   readonly CHANNELMAP_FILE="$HOME/.tvChannelMap"
   readonly RAW_CHANNELMAP_FILE="/tmp/channels.txt"
-  readonly TUNER=2
-  if [[ -z "$HDHOMERUNS" ]];
-  then
+  if [[ -z "$HDHOMERUNS" ]]; then
     log "Did not find any HDHomerun devices on this network using the 'hdhomerun_config' discover command."
     exit 1
   fi
-  if [[ ! -f $CHANNELMAP_FILE ]];
-  then
+  if [[ ! -f $CHANNELMAP_FILE ]]; then
     log "Channel map file $CHANNELMAP_FILE not found. Going to build."
-    if [[ -f $RAW_CHANNELMAP_FILE ]];
-    then
+    if [[ -f $RAW_CHANNELMAP_FILE ]]; then
       rm $RAW_CHANNELMAP_FILE
     fi
     for HDHOMERUN in $HDHOMERUNS; do
-      log "HDHomerun ID: $HDHOMERUN"
-      CHANNELMAP=`hdhomerun_config $HDHOMERUN get /tuner0/channelmap`
+      set_highest_tuner_number
+      log "HDHomerun ID: $HDHOMERUN tuner number is: $TUNER"
+      CHANNELMAP=`hdhomerun_config $HDHOMERUN get /tuner$TUNER/channelmap`
       build_channel_map
     done
   fi
   readonly HDHOMERUN=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $1}' | head -1)
   readonly CHANNEL=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $2}'| head -1)
   readonly PROGRAM=$(cat $CHANNELMAP_FILE | grep -i "$SEARCH_TEXT" | awk -F"|" '{print $3}'| head -1)
-  if [[ -z "$CHANNEL" && -z "$PROGRAM" && -z "$HDHOMERUN" ]];
-  then
+  if [[ -z "$CHANNEL" && -z "$PROGRAM" && -z "$HDHOMERUN" ]]; then
     log "Channel not found in channel map file $CHANNELMAP_FILE. You passed \"$SEARCH_TEXT\""
     exit 1
   fi
-  setAndView
+  set_highest_tuner_number
+  log "HDHOMERUN: $HDHOMERUN CHANNEL: $CHANNEL PROGRAM: $PROGRAM TUNER: $TUNER"
+  set_and_view
 }
 main "$@"
+
