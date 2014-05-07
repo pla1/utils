@@ -11,7 +11,7 @@
 ###############################
 function build_channel_map() {
   log "Scanning HDHomeRun unit $HDHOMERUN. This will take some time."
-  hdhomerun_config $HDHOMERUN scan /$TUNER $RAW_CHANNELMAP_FILE
+  hdhomerun_config $HDHOMERUN scan /tuner$TUNER $RAW_CHANNELMAP_FILE
   while read line
   do
     TEMP=$(echo "$line" | awk -F"$CHANNELMAP:|\)" '{print $2}')
