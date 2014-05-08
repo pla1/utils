@@ -1,0 +1,11 @@
+#!/bin/bash
+readonly HDHOMERUNS=`hdhomerun_config discover | cut -f3 -d' '`
+for HDHOMERUN in $HDHOMERUNS; do
+  for (( c=0; c<=5; c++ ))
+  do
+    RESULT=$(hdhomerun_config $HDHOMERUN get /tuner$c/status)
+    if [[ ! "$RESULT" =~ "ERROR" ]]; then
+      echo "$HDHOMERUN $RESULT"
+    fi
+  done
+done
