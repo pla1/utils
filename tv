@@ -65,9 +65,10 @@ function set_highest_tuner_number() {
   for (( c=0; c<=5; c++ ))
   do
     RESULT=$(hdhomerun_config $HDHOMERUN get /tuner$c/status)
-    if [[ "$RESULT" =~ "ch=" ]]; then
+    log "Set highest tuner result: $RESULT"
+    if [[ "$RESULT" =~ "ch=none" ]]; then
       highest_tuner_number=$c
-    fi   	
+    fi
   done
   if [[ $highest_tuner_number = -1 ]]; then
     log "No available tuners found for $HDHOMERUN"
@@ -87,6 +88,7 @@ function set_and_view() {
   hdhomerun_config $HDHOMERUN set /tuner$TUNER/channel $CHANNEL
   hdhomerun_config $HDHOMERUN set /tuner$TUNER/program $PROGRAM
   hdhomerun_config $HDHOMERUN save /tuner$TUNER - | mplayer -geometry 800x450 -
+  sleep 1  
   hdhomerun_config $HDHOMERUN set /tuner$TUNER/channel none
 }
 
