@@ -1,0 +1,7 @@
+#!/bin/bash
+readonly STATIONS=(wcsc-hd espnhd tnthd wciv-tv)
+for STATION in "${STATIONS[@]}"
+do
+	~/utils/tv $STATION &
+        sleep 1
+done
