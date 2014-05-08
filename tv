@@ -1,10 +1,15 @@
 #!/bin/bash
 # View HDHomeRun channel. Builds a channel map, searches for passed channel letters, tunes HDHomeRun to channel program and send to mplayer.
 #
-
+# To install or update:
+# 1. wget https://raw.githubusercontent.com/pla1/utils/master/tv -O tv
+# 2. chmod +x tv
+#
+# To run: ./tv espn
+###############################
 
 ###############################
-# Scan HDHomerun and build channel map text file. 
+# Scan HDHomerun and build channel map text file.
 # Globals: HDHOMERUN, RAW_CHANNELMAP_FILE, CHANNELMAP
 # Arguments: None
 # Returns: None
