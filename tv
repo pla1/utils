@@ -6,6 +6,9 @@
 # 2. chmod +x tv
 #
 # To run: ./tv espn
+#
+# More info: http://platechnotes.patrickarchibald.com/2014/05/bash-script-to-view-hdhomerun-channel.html
+#
 ###############################
 
 ###############################
