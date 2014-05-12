@@ -1,0 +1,14 @@
+#!/bin/bash
+MAC="$1"
+MAC=${MAC//[:|\-|.]/}
+LENGTH=${#MAC}
+if [[ $LENGTH -ne 12 ]]; then
+  echo "Length of the unformatted MAC address should equal 12 but it is: $LENGTH"
+  exit -1
+fi
+MAC1=${MAC:0:2}:${MAC:2:2}:${MAC:4:2}:${MAC:6:2}:${MAC:8:2}:${MAC:10:2}
+MAC2=${MAC:0:2}-${MAC:2:2}-${MAC:4:2}-${MAC:6:2}-${MAC:8:2}-${MAC:10:2}
+MAC3=${MAC:0:4}.${MAC:4:4}.${MAC:8:4}
+echo "$MAC1" | xclip -selection c -i
+echo "$MAC2" | xclip -selection c -i
+echo "$MAC3" | xclip -selection c -i
