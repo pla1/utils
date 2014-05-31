@@ -42,7 +42,7 @@ function build_channel_map() {
 }
 
 ###############################
-# Write a message to stdout and to /var/log/syslog. 
+# Write a message to stdout and to /var/log/syslog.
 # Globals: None
 # Arguments: Message
 # Returns: None
@@ -53,7 +53,7 @@ function log() {
 }
 
 ###############################
-# Checks for the hdhomerun_config command. If not found tell the user and exit this script.  
+# Checks for the hdhomerun_config command. If not found tell the user and exit this script.
 # Globals: None
 # Arguments: None
 # Returns: None
@@ -74,7 +74,7 @@ function set_highest_tuner_number() {
   do
     RESULT=$(hdhomerun_config $HDHOMERUN get /tuner$c/status)
     log "Set highest tuner result: $RESULT"
-    if [[ "$RESULT" =~ "ch=none" ]]; then
+    if [[ "$RESULT" =~ "ch=" ]]; then
       highest_tuner_number=$c
     fi
   done
