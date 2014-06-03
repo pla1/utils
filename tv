@@ -6,6 +6,9 @@
 # 2. chmod +x tv
 #
 # To run: ./tv espn
+#
+# More info: http://platechnotes.patrickarchibald.com/2014/05/bash-script-to-view-hdhomerun-channel.html
+#
 ###############################
 
 ###############################
@@ -39,7 +42,7 @@ function build_channel_map() {
 }
 
 ###############################
-# Write a message to stdout and to /var/log/syslog. 
+# Write a message to stdout and to /var/log/syslog.
 # Globals: None
 # Arguments: Message
 # Returns: None
@@ -50,7 +53,7 @@ function log() {
 }
 
 ###############################
-# Checks for the hdhomerun_config command. If not found tell the user and exit this script.  
+# Checks for the hdhomerun_config command. If not found tell the user and exit this script.
 # Globals: None
 # Arguments: None
 # Returns: None
