@@ -38,6 +38,6 @@ echo "<html><body>" > $OUTPUT
 for file in $GIFS
 do
 	gif=$(basename "$file")
-	echo "<img src='$gif'>" >> $OUTPUT
+	echo "<img src='$gif' title='$gif' alt='$gif'>" >> $OUTPUT
 done
 echo "</body></html>" >> $OUTPUT
