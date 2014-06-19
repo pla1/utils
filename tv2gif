@@ -26,7 +26,8 @@ do
     log "Killing process ID $PID"  
     kill -9 "$PID"
     rm -f /tmp/*.png
-    avconv -i /tmp/tv2gif.mpg -vframes 70 /tmp/1%5d.png
-    convert -loop 0 -resize 200 -layers optimize /tmp/%d.png[100010-100070] /tmp/$STATION.gif
+    avconv -i /tmp/tv2gif.mpg -vframes 150  -filter:v select="mod(n-1\,2)"  /tmp/1%5d.png
+    convert -loop 0 -resize 200 -layers optimize /tmp/%d.png[100010-100150] /tmp/$STATION.gif
+    exit
   fi
 done < ~/.tvChannelMap
