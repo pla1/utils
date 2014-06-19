@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# Convert what is playing on tv to animated GIFs
+#
+function log() {
+  printf "\n\n\n\n*****$1*****\n\n\n"
+}
+TUNER=2
+while read line
+do
+  log "$line"
+  array=(${line//|/ })
+  HDHOMERUN="${array[0]}"
+  CHANNEL="${array[1]}"
+  PROGRAM="${array[2]}"
+  STATION="${array[3]}"
+  if [[ ! $STATION == GAL* ]] 
+    then
+    hdhomerun_config $HDHOMERUN set /tuner$TUNER/channel $CHANNEL
+    hdhomerun_config $HDHOMERUN set /tuner$TUNER/program $PROGRAM
+#    hdhomerun_config $HDHOMERUN save /tuner$TUNER - | mplayer -geometry 800x450+0+0 - & 
+    hdhomerun_config $HDHOMERUN save /tuner$TUNER /tmp/tv2gif.mpg & 
+    PID=$!
+    log "Playing $STATION in process ID $PID"
+    sleep 7
+    log "Killing process ID $PID"  
+    kill -9 "$PID"
+    rm -f /tmp/*.png
+    avconv -i /tmp/tv2gif.mpg -vframes 70 /tmp/1%5d.png
+    convert -loop 0 -resize 200 -layers optimize /tmp/%d.png[100010-100070] /tmp/$STATION.gif
+  fi
+done < ~/.tvChannelMap
