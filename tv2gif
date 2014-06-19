@@ -14,20 +14,30 @@ do
   CHANNEL="${array[1]}"
   PROGRAM="${array[2]}"
   STATION="${array[3]}"
-  if [[ ! $STATION == GAL* ]] 
+  if [[ ! $STATION == GAL* ]]
     then
     hdhomerun_config $HDHOMERUN set /tuner$TUNER/channel $CHANNEL
     hdhomerun_config $HDHOMERUN set /tuner$TUNER/program $PROGRAM
-#    hdhomerun_config $HDHOMERUN save /tuner$TUNER - | mplayer -geometry 800x450+0+0 - & 
-    hdhomerun_config $HDHOMERUN save /tuner$TUNER /tmp/tv2gif.mpg & 
+#    hdhomerun_config $HDHOMERUN save /tuner$TUNER - | mplayer -geometry 800x450+0+0 - &
+    hdhomerun_config $HDHOMERUN save /tuner$TUNER /tmp/tv2gif.mpg &
     PID=$!
     log "Playing $STATION in process ID $PID"
     sleep 7
-    log "Killing process ID $PID"  
+    log "Killing process ID $PID"
     kill -9 "$PID"
     rm -f /tmp/*.png
-    avconv -i /tmp/tv2gif.mpg -vframes 150  -filter:v select="mod(n-1\,2)"  /tmp/1%5d.png
-    convert -loop 0 -resize 200 -layers optimize /tmp/%d.png[100010-100150] /tmp/$STATION.gif
-    exit
+    avconv -r 2 -i /tmp/tv2gif.mpg -vframes 150  -filter:v select="mod(n-1\,2)" -r 1  /tmp/1%5d.png
+    convert -loop 0 -resize 200 -layers optimize /tmp/%d.png[100010-100090] /tmp/$STATION.gif
   fi
 done < ~/.tvChannelMap
+#done < /tmp/.tvChannelMap
+
+GIFS="/tmp/*.gif"
+OUTPUT="/tmp/test.html"
+echo "<html><body>" > $OUTPUT
+for file in $GIFS
+do
+	gif=$(basename "$file")
+	echo "<img src='$gif'>" >> $OUTPUT
+done
+echo "</body></html>" >> $OUTPUT
