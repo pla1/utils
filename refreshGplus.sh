@@ -8,10 +8,10 @@ do
 	echo "Window: $win"
 	for i in `seq 1 100`;
         do
-		xdotool type --window $win "j"
+		xdotool type --clearmodifiers --window $win "j"
 		sleep 3s
         done
-	xdotool type --window $win "l"
+	xdotool key --clearmodifiers --window $win "ctrl+r"
 	sleep 3s
 done
 
