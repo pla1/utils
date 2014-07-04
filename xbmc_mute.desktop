@@ -1,0 +1,30 @@
+[Desktop Entry]
+Name=Mute XBMC 
+Type=Application
+# I put the icon file in ~/.local/share/icons
+Icon=Mute.png
+Exec=curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method": "Application.SetMute", "params": {"mute":"toggle"}, "id": 1}' http://i3c.pla.lcl:8080/jsonrpc
+
+X-Ayatana-Desktop-Shortcuts=Mute;Quiet;Medium;Loud
+
+[Mute Shortcut Group]
+Name=Mute
+Exec=curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method": "Application.SetMute", "params": {"mute":"toggle"}, "id": 1}' http://i3c.pla.lcl:8080/jsonrpc
+OnlyShowIn=Unity
+
+[Quiet Shortcut Group]
+Name=Quiet
+Exec=curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method": "Application.SetVolume", "params": {"volume":50}, "id": 1}' http://i3c.pla.lcl:8080/jsonrpc
+OnlyShowIn=Unity
+
+[Medium Shortcut Group]
+Name=Medium
+Exec=curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method": "Application.SetVolume", "params": {"volume":70}, "id": 1}' http://i3c.pla.lcl:8080/jsonrpc
+OnlyShowIn=Unity
+
+[Loud Shortcut Group]
+Name=Loud
+Exec=curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method": "Application.SetVolume", "params": {"volume":100}, "id": 1}' http://i3c.pla.lcl:8080/jsonrpc
+OnlyShowIn=Unity
+
+
