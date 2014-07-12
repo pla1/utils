@@ -33,5 +33,5 @@ if [[ $days -lt $THRESHOLD_DAYS ]]
 then
   message="Domain name registration expires in $days days for domain name $DOMAIN_NAME. Expiration date from WHOIS: $expirationDate"
   log "$message"
-  echo $message | /usr/bin/mail -s "$message" "$EMAIL_ADDRESS"
+  echo $message | mail -s "$message" "$EMAIL_ADDRESS"
 fi
