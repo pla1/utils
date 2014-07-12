@@ -9,7 +9,8 @@ then
   echo "Please pass the domain name in the first parameter. Email address should be the second parameter."
   exit -1
 fi
-LABEL="Registrar Registration Expiration Date: "
+LABEL="   Expiration Date: "
+THRESHOLD_DAYS=30
 dateString=$(whois "$DOMAIN_NAME" | grep "$LABEL" | cut -d':' -f 2)
 if [ -z "$dateString" ]
 then
@@ -22,7 +23,7 @@ d1=$(date -d "$dateString" +%s)
 d2=$(date -d "now - 30 days" +%s)
 days=$(( (d1 - d2) / 86400 ))
 echo "Domain name $DOMAIN_NAME expires in $days days"
-if [[ $days -lt 30 ]]
+if [[ $days -lt $THRESHOLD_DAYS ]]
 then
   message="Domain name registration expires in $days for domain name $DOMAIN_NAME"
   echo "$message"
