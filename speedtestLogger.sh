@@ -1,6 +1,8 @@
 #!/usr/bin/expect
 #
-# Parse output Linux command line speed test and upload to database table. 
+# Parse output from Linux command line speed test speedtest-cli and upload to database table. 
+#
+# speedtest-cli lives here: https://github.com/sivel/speedtest-cli
 #
 set outputFile [open /tmp/output.txt w]
 exp_internal 1
