@@ -1,4 +1,7 @@
 #!/usr/bin/expect
+#
+# Parse output Linux command line speed test and upload to database table. 
+#
 set outputFile [open /tmp/output.txt w]
 exp_internal 1
 spawn speedtest-cli
