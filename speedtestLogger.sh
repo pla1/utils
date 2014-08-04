@@ -1,6 +1,8 @@
 #!/usr/bin/expect
 #
-# Parse output from Linux command line speed test speedtest-cli and upload to database table. 
+# Parse output from Linux command line speed test speedtest-cli and upload to database table.
+#
+# This script lives here: https://github.com/pla1/utils/blob/master/speedtestLogger.sh
 #
 # speedtest-cli lives here: https://github.com/sivel/speedtest-cli
 #
@@ -29,5 +31,4 @@ expect -re ".*Upload: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
 	set uploadUnit $expect_out(2,string)
 }
 
-puts $outputFile "{'fromIpAddress':'$fromIpAddress','hostedBy':'$hostedBy','distance':'$distance','latency':'$latency', 'download': '$download', 'downloadUOM':'$downloadUnit','upload':'$upload','uploadUOM':'$uploadUnit'}"
-
+exec curl --verbose --include --header Content-Type:application/json --header token:6bbc6fe7-5473-4d04-9468-900755 --request PUT --data '{"download":2000,"upload":1000}' https://e.hometelco.com/a/SpeedtestUpload
