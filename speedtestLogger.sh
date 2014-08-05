@@ -5,8 +5,9 @@
 TOKEN=$(cat /etc/speedtestLogger-token)
 if [ -z "$TOKEN" ] 
 then
-	HOSTNAME=$(hostname -i)
-	message="Speedtest token missing. Speed test aborted. $HOSTNAME"
+	HOSTNAME=$(hostname)
+	IP=$(curl http://myip.pla1.net)
+	message="Speedtest token missing. Speed test aborted. $HOSTNAME $IP"
 	echo "$message"
 	logger "$message"
 	echo "$message" | mail -s "$message" root
