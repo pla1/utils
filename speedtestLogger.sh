@@ -11,8 +11,6 @@ exp_internal 1
 spawn speedtest-cli
 expect "Retrieving speedtest.net configuration..."
 expect "Retrieving speedtest.net server list..."
-set output $expect_out(buffer)
-puts $outputFile "OUTPUT: $output"
 expect -re ".*Testing from .*\\((\[0-9\]{1,3}\.\[0-9\]{1,3}\.\[0-9\]{1,3}\.\[0-9\]{1,3})\\).*" {
 	 set fromIpAddress $expect_out(1,string)
 }
@@ -30,5 +28,6 @@ expect -re ".*Upload: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
 	set upload $expect_out(1,string)
 	set uploadUnit $expect_out(2,string)
 }
+puts $outputFile "curl --verbose --include --header Content-Type:application/json --header token:6bbc6fe7-5473-4d04-9468-900755 --request PUT --data '{\"download\":$download,\"upload\":$upload}' https://e.hometelco.com/a/SpeedtestUpload"
+exec /bin/sh /tmp/output.txt
 
-exec curl --verbose --include --header Content-Type:application/json --header token:6bbc6fe7-5473-4d04-9468-900755 --request PUT --data '{"download":2000,"upload":1000}' https://e.hometelco.com/a/SpeedtestUpload
