@@ -13,8 +13,10 @@ then
 	echo "$message" | mail -s "$message" root
 	exit
 fi
+logger "$0 started."
 OUTPUT_SCRIPT_FROM_EXPECT="/tmp/speedtestLoggerOutput.sh"
 rm --force "$OUTPUT_SCRIPT_FROM_EXPECT"
 RUNNING_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 $RUNNING_DIRECTORY/speedtestLogger.exp "$TOKEN"
 /bin/bash "$OUTPUT_SCRIPT_FROM_EXPECT"
+logger "$0 ended."
