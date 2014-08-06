@@ -13,7 +13,7 @@
 set token [lindex $argv 0]
 set outputFile [open /tmp/speedtestLoggerOutput.sh w]
 #exp_internal 1
-spawn /usr/local/bin/speedtest-cli
+spawn /usr/local/bin/speedtest-cli --server 4211
 expect "Retrieving speedtest.net configuration..."
 expect "Retrieving speedtest.net server list..."
 expect -re ".*Testing from .*\\((\[0-9\]{1,3}\.\[0-9\]{1,3}\.\[0-9\]{1,3}\.\[0-9\]{1,3})\\).*" {
