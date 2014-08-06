@@ -26,7 +26,7 @@ expect -re ".*Hosted by (.*) \\\[(\[0-9\]+\.\[0-9\]+)(.*)\\\]: (\[0-9\]+\.\[0-9\
 	set latency $expect_out(4,string)
 	set latencyUOM $expect_out(5,string)
 }
-set timeout 30
+set timeout 300
 expect -re ".*Download: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
 	set download $expect_out(1,string)
 	set downloadUOM $expect_out(2,string)
