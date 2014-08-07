@@ -15,14 +15,14 @@ set outputFile [open /tmp/speedtestLoggerOutput.sh w]
 set hostname [exec /bin/hostname]
 exp_internal 1
 
-spawn ping -c 5 speedtest.homesc.com
+spawn ping -c 10 speedtest.homesc.com
 expect -re ".*(\[0-9\]+) packets transmitted, (\[0-9\]+) received, (\[0-9\]+)% packet loss, time (\[0-9\]+)ms\r\n" {
-	set packetsTransmitted $expect_out(1,string)
-	set packetsReceived $expect_out(2,string)
-	set packetLoss $expect_out(3,string)
+	set pingPacketsTransmitted $expect_out(1,string)
+	set pingPacketsReceived $expect_out(2,string)
+	set pingPacketLoss $expect_out(3,string)
 	set pingTime $expect_out(4,string)
 }
-puts "PING RESULTS: $packetsTransmitted $packetsReceived $packetLoss $pingTime"
+puts "PING RESULTS: $pingPacketsTransmitted $pingPacketsReceived $pingPacketLoss $pingTime"
 expect -re ".*rtt min/avg/max/mdev = (\[0-9\]+\.\[0-9\]+)/(\[0-9\]+\.\[0-9\]+)/(\[0-9\]+\.\[0-9\]+)/(\[0-9\]+\.\[0-9\]+) ms.*" {
 	set pingMinimum $expect_out(1,string)
 	set pingAverage $expect_out(2,string)
@@ -53,5 +53,5 @@ expect -re ".*Upload: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
 	set upload $expect_out(1,string)
 	set uploadUOM $expect_out(2,string)
 }
-puts $outputFile "curl --header Content-Type:application/json --header token:$token --request PUT --data '{\"distanceUOM\":\"$distanceUOM\",\"latencyUOM\":\"$latencyUOM\",\"downloadUOM\":\"$downloadUOM\",\"uploadUOM\":\"$uploadUOM\",\"hostedBy\":\"$hostedBy\",\"distance\":$distance,\"latency\":$latency,\"download\":$download,\"upload\":$upload,\"packetsTransmitted\":$packetsTransmitted,\"packetsReceived\":$packetsReceived,\"packetLoss\":$packetLoss,\"pingTime\":$pingTime,\"pingMinimum\":$pingMinimum,\"pingAverage\":$pingAverage,\"pingMaximum\":$pingMaximum,\"pingStandardDeviation\":$pingStandardDeviation,\"hostname\":$hostname}' https://e.hometelco.com/a/SpeedtestUpload"
+puts $outputFile "curl --header Content-Type:application/json --header token:$token --request PUT --data '{\"distanceUOM\":\"$distanceUOM\",\"latencyUOM\":\"$latencyUOM\",\"downloadUOM\":\"$downloadUOM\",\"uploadUOM\":\"$uploadUOM\",\"hostedBy\":\"$hostedBy\",\"distance\":$distance,\"latency\":$latency,\"download\":$download,\"upload\":$upload,\"pingPacketsTransmitted\":$pingPacketsTransmitted,\"pingPacketsReceived\":$pingPacketsReceived,\"pingPacketLoss\":$pingPacketLoss,\"pingTime\":$pingTime,\"pingMinimum\":$pingMinimum,\"pingAverage\":$pingAverage,\"pingMaximum\":$pingMaximum,\"pingStandardDeviation\":$pingStandardDeviation,\"hostname\":$hostname}' https://e.hometelco.com/a/SpeedtestUpload"
 close $outputFile
