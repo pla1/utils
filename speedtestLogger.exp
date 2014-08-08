@@ -69,7 +69,7 @@ expect {
 }
 puts "100MB DL SECONDS: $dl100MBSeconds"
 # todo change to 90  in the if below
-if {$dl100MBSeconds < 1} {
+if {$dl100MBSeconds < 90} {
 	spawn wget --output-document /tmp/test.mpg http://hometelco.com/1GB.mpg
 	expect {
 		-re "/s + in +(\[0-9\])m +(\[0-9\]*\.?\[0-9\]+)s" {
