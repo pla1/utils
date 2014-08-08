@@ -25,12 +25,12 @@ set dl1GBMinutes 0
 set dl1GBSeconds 0
 
 expect {
-	-re "M/s + in +(\[0-9\])m +(\[0-9\]+\.?\[0-9\]+)s" {
+	-re "/s + in +(\[0-9\])m +(\[0-9\]*\.?\[0-9\]+)s" {
 		set dl10MBMinutes $expect_out(1,string)
 		set dl10MBSeconds $expect_out(2,string)
 		set dl10MBSeconds [expr {$dl10MBSeconds + $dl10MBMinutes * 60}]
 	}
-	-re "M/s + in +(\[0-9\]+\.?\[0-9\]+)s" {
+	-re "/s + in +(\[0-9\]+\.?\[0-9\]+)s" {
 		set dl10MBSeconds $expect_out(1,string)
 	}
 }
@@ -39,26 +39,26 @@ puts "10MB DL MINUTES: $dl10MBMinutes SECONDS: $dl10MBSeconds"
 
 spawn wget --output-document /tmp/test.mpg http://hometelco.com/100MB.mpg
 expect {
-	-re "M/s + in +(\[0-9\])m +(\[0-9\]+\.?\[0-9\]+)s" {
+	-re "/s + in +(\[0-9\])m +(\[0-9\]*\.?\[0-9\]+)s" {
 		set dl100MBMinutes $expect_out(1,string)
 		set dl100MBSeconds $expect_out(2,string)
 		set dl100MBSeconds [expr {$dl100MBSeconds + $dl100MBMinutes * 60}]
 	}
-	-re "M/s + in +(\[0-9\]+\.?\[0-9\]+)s" {
+	-re "/s + in +(\[0-9\]+\.?\[0-9\]+)s" {
 		set dl100MBSeconds $expect_out(1,string)
 	}
 }
 puts "100MB DL SECONDS: $dl100MBSeconds"
-
-if {$dl100MBSeconds < 90} {
+# todo change to 90  in the if below
+if {$dl100MBSeconds < 1} {
 	spawn wget --output-document /tmp/test.mpg http://hometelco.com/1GB.mpg
 	expect {
-		-re "M/s + in +(\[0-9\])m +(\[0-9\]+\.?\[0-9\]+)s" {
+		-re "/s + in +(\[0-9\])m +(\[0-9\]*\.?\[0-9\]+)s" {
 		  	set dl1GBMinutes $expect_out(1,string)
 		  	set dl1GBSeconds $expect_out(2,string)
 			set dl1GBSeconds [expr {$dl1GBSeconds + $dl1GBMinutes * 60}]
 		}
-		-re "M/s + in +(\[0-9\]+\.?\[0-9\]+)s" {
+		-re "/s + in +(\[0-9\]+\.?\[0-9\]+)s" {
 			set dl1GBSeconds $expect_out(1,string)
 		}
 	}
