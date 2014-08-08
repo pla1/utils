@@ -13,7 +13,75 @@
 set token [lindex $argv 0]
 set outputFile [open /tmp/speedtestLoggerOutput.sh w]
 set hostname [exec /bin/hostname]
-exp_internal 1
+#exp_internal 1
+set timeout 600
+
+spawn wget --output-document /tmp/test.mpg http://hometelco.com/10MB.mpg
+set dl10MBMinutes 0
+set dl10MBSeconds 0
+set dl100MBMinutes 0
+set dl100MBSeconds 0
+set dl1GBMinutes 0
+set dl1GBSeconds 0
+
+expect {
+	-re "M/s + in +(\[0-9\])m +(\[0-9\]+\.?\[0-9\]+)s" {
+		set dl10MBMinutes $expect_out(1,string)
+		set dl10MBSeconds $expect_out(2,string)
+		set dl10MBSeconds [expr {$dl10MBSeconds + $dl10MBMinutes * 60}]
+	}
+	-re "M/s + in +(\[0-9\]+\.?\[0-9\]+)s" {
+		set dl10MBSeconds $expect_out(1,string)
+	}
+}
+puts "10MB DL MINUTES: $dl10MBMinutes SECONDS: $dl10MBSeconds"
+
+
+spawn wget --output-document /tmp/test.mpg http://hometelco.com/100MB.mpg
+expect {
+	-re "M/s + in +(\[0-9\])m +(\[0-9\]+\.?\[0-9\]+)s" {
+		set dl100MBMinutes $expect_out(1,string)
+		set dl100MBSeconds $expect_out(2,string)
+		set dl100MBSeconds [expr {$dl100MBSeconds + $dl100MBMinutes * 60}]
+	}
+	-re "M/s + in +(\[0-9\]+\.?\[0-9\]+)s" {
+		set dl100MBSeconds $expect_out(1,string)
+	}
+}
+puts "100MB DL SECONDS: $dl100MBSeconds"
+
+if {$dl100MBSeconds < 90} {
+	spawn wget --output-document /tmp/test.mpg http://hometelco.com/1GB.mpg
+	expect {
+		-re "M/s + in +(\[0-9\])m +(\[0-9\]+\.?\[0-9\]+)s" {
+		  	set dl1GBMinutes $expect_out(1,string)
+		  	set dl1GBSeconds $expect_out(2,string)
+			set dl1GBSeconds [expr {$dl1GBSeconds + $dl1GBMinutes * 60}]
+		}
+		-re "M/s + in +(\[0-9\]+\.?\[0-9\]+)s" {
+			set dl1GBSeconds $expect_out(1,string)
+		}
+	}
+	puts "1GB DL SECONDS: $dl1GBSeconds"
+}
+
+spawn iperf --port 5002 --udp --format m -c 64.20.26.68 
+expect -re ".*Server Report:.* (\[0-9\]+\.\[0-9\]+) Mbits/sec +(\[0-9\]+\.\[0-9\]+) ms +(\[0-9\]+)/ +(\[0-9\]+) " {
+	set iperfBandwidthUDP $expect_out(1,string)
+	set iperfJitterUDP $expect_out(2,string)
+	set iperfLostUDP $expect_out(3,string)
+	set iperfTotalUDP $expect_out(4,string)
+}
+puts "IPERF UDP BANDWIDTH $iperfBandwidthUDP JITTER: $iperfJitterUDP LOST: $iperfLostUDP TOTAL: $iperfTotalUDP"
+
+
+spawn iperf --port 5001 --format m -c 64.20.26.68 
+expect -re ".* (\[0-9\]+\.\[0-9\]+) Mbits/sec.*" {
+	set iperfBandwidthTCP $expect_out(1,string)
+}
+puts "IPERF TCP BANDWIDTH $iperfBandwidthTCP"
+
+
 
 spawn ping -c 10 speedtest.homesc.com
 expect -re ".*(\[0-9\]+) packets transmitted, (\[0-9\]+) received, (\[0-9\]+)% packet loss, time (\[0-9\]+)ms\r\n" {
@@ -44,7 +112,7 @@ expect -re ".*Hosted by (.*) \\\[(\[0-9\]+\.\[0-9\]+)(.*)\\\]: (\[0-9\]+\.\[0-9\
 	set latency $expect_out(4,string)
 	set latencyUOM $expect_out(5,string)
 }
-set timeout 300
+
 expect -re ".*Download: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
 	set download $expect_out(1,string)
 	set downloadUOM $expect_out(2,string)
