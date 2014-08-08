@@ -13,7 +13,7 @@
 set token [lindex $argv 0]
 set outputFile [open /tmp/speedtestLoggerOutput.sh w]
 set hostname [exec /bin/hostname]
-exp_internal 1
+#exp_internal 1
 set timeout 600
 
 
