@@ -10,6 +10,7 @@
 #
 # Requires expect. sudo apt-get install expect
 #
+set server "scnx-ng01.homesc.com"
 set token [lindex $argv 0]
 set outputFile [open /tmp/speedtestLoggerOutput.sh w]
 set hostname [exec /bin/hostname]
@@ -18,7 +19,7 @@ set timeout 600
 
 
 
-spawn ping -c 10 speedtest.homesc.com
+spawn ping -c 10 $server
 expect -re ".*\r\n(\[0-9\]+) packets transmitted, (\[0-9\]+) received, (\[0-9\]+)% packet loss, time (\[0-9\]+)ms\r\n" {
 	set pingPacketsTransmitted $expect_out(1,string)
 	set pingPacketsReceived $expect_out(2,string)
@@ -42,7 +43,7 @@ set dl100MBSeconds 0
 set dl1GBMinutes 0
 set dl1GBSeconds 0
 
-spawn wget --output-document /tmp/test.mpg http://hometelco.com/10MB.mpg
+spawn wget --output-document /tmp/test.mpg http://$server/10MB.mpg
 expect {
 	-re "/s + in +(\[0-9\])m +(\[0-9\]*\.?\[0-9\]+)s" {
 		set dl10MBMinutes $expect_out(1,string)
@@ -56,7 +57,7 @@ expect {
 puts "10MB DL MINUTES: $dl10MBMinutes SECONDS: $dl10MBSeconds"
 
 
-spawn wget --output-document /tmp/test.mpg http://hometelco.com/100MB.mpg
+spawn wget --output-document /tmp/test.mpg http://$server/100MB.mpg
 expect {
 	-re "/s + in +(\[0-9\])m +(\[0-9\]*\.?\[0-9\]+)s" {
 		set dl100MBMinutes $expect_out(1,string)
@@ -70,7 +71,7 @@ expect {
 puts "100MB DL SECONDS: $dl100MBSeconds"
 # todo change to 90  in the if below
 if {$dl100MBSeconds < 90} {
-	spawn wget --output-document /tmp/test.mpg http://hometelco.com/1GB.mpg
+	spawn wget --output-document /tmp/test.mpg http://$server/1GB.mpg
 	expect {
 		-re "/s + in +(\[0-9\])m +(\[0-9\]*\.?\[0-9\]+)s" {
 		  	set dl1GBMinutes $expect_out(1,string)
@@ -84,7 +85,7 @@ if {$dl100MBSeconds < 90} {
 	puts "1GB DL SECONDS: $dl1GBSeconds"
 }
 
-spawn iperf --port 5002 --udp --format k -c 64.20.26.68 
+spawn iperf --port 5002 --udp --format k -c $server 
 expect -re ".*Server Report:.* (\[0-9\]+\.\[0-9\]+) Kbits/sec +(\[0-9\]+\.\[0-9\]+) ms +(\[0-9\]+)/ +(\[0-9\]+) " {
 	set iperfBandwidthUDP $expect_out(1,string)
 	set iperfJitterUDP $expect_out(2,string)
@@ -94,7 +95,7 @@ expect -re ".*Server Report:.* (\[0-9\]+\.\[0-9\]+) Kbits/sec +(\[0-9\]+\.\[0-9\
 puts "IPERF UDP BANDWIDTH $iperfBandwidthUDP JITTER: $iperfJitterUDP LOST: $iperfLostUDP TOTAL: $iperfTotalUDP"
 
 
-spawn iperf --port 5001 --format k -c 64.20.26.68 
+spawn iperf --port 5001 --format k -c $server 
 expect -re ".* (\[0-9\]+\.\[0-9\]+) Kbits/sec.*" {
 	set iperfBandwidthTCP $expect_out(1,string)
 }
