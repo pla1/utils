@@ -13,10 +13,28 @@
 set token [lindex $argv 0]
 set outputFile [open /tmp/speedtestLoggerOutput.sh w]
 set hostname [exec /bin/hostname]
-#exp_internal 1
+exp_internal 1
 set timeout 600
 
-spawn wget --output-document /tmp/test.mpg http://hometelco.com/10MB.mpg
+
+
+spawn ping -c 10 speedtest.homesc.com
+expect -re ".*\r\n(\[0-9\]+) packets transmitted, (\[0-9\]+) received, (\[0-9\]+)% packet loss, time (\[0-9\]+)ms\r\n" {
+	set pingPacketsTransmitted $expect_out(1,string)
+	set pingPacketsReceived $expect_out(2,string)
+	set pingPacketLoss $expect_out(3,string)
+	set pingTime $expect_out(4,string)
+}
+puts "PING RESULTS: $pingPacketsTransmitted $pingPacketsReceived $pingPacketLoss $pingTime"
+
+expect -re ".*rtt min/avg/max/mdev = (\[0-9\]+\.\[0-9\]+)/(\[0-9\]+\.\[0-9\]+)/(\[0-9\]+\.\[0-9\]+)/(\[0-9\]+\.\[0-9\]+) ms.*" {
+	set pingMinimum $expect_out(1,string)
+	set pingAverage $expect_out(2,string)
+	set pingMaximum $expect_out(3,string)
+	set pingStandardDeviation $expect_out(4,string)
+}
+puts "PING TOTALS: $pingMinimum $pingAverage $pingMaximum $pingStandardDeviation"
+
 set dl10MBMinutes 0
 set dl10MBSeconds 0
 set dl100MBMinutes 0
@@ -24,6 +42,7 @@ set dl100MBSeconds 0
 set dl1GBMinutes 0
 set dl1GBSeconds 0
 
+spawn wget --output-document /tmp/test.mpg http://hometelco.com/10MB.mpg
 expect {
 	-re "/s + in +(\[0-9\])m +(\[0-9\]*\.?\[0-9\]+)s" {
 		set dl10MBMinutes $expect_out(1,string)
@@ -80,24 +99,6 @@ expect -re ".* (\[0-9\]+\.\[0-9\]+) Kbits/sec.*" {
 	set iperfBandwidthTCP $expect_out(1,string)
 }
 puts "IPERF TCP BANDWIDTH $iperfBandwidthTCP"
-
-
-
-spawn ping -c 10 speedtest.homesc.com
-expect -re ".*(\[0-9\]+) packets transmitted, (\[0-9\]+) received, (\[0-9\]+)% packet loss, time (\[0-9\]+)ms\r\n" {
-	set pingPacketsTransmitted $expect_out(1,string)
-	set pingPacketsReceived $expect_out(2,string)
-	set pingPacketLoss $expect_out(3,string)
-	set pingTime $expect_out(4,string)
-}
-puts "PING RESULTS: $pingPacketsTransmitted $pingPacketsReceived $pingPacketLoss $pingTime"
-expect -re ".*rtt min/avg/max/mdev = (\[0-9\]+\.\[0-9\]+)/(\[0-9\]+\.\[0-9\]+)/(\[0-9\]+\.\[0-9\]+)/(\[0-9\]+\.\[0-9\]+) ms.*" {
-	set pingMinimum $expect_out(1,string)
-	set pingAverage $expect_out(2,string)
-	set pingMaximum $expect_out(3,string)
-	set pingStandardDeviation $expect_out(4,string)
-}
-puts "PING TOTALS: $pingMinimum $pingAverage $pingMaximum $pingStandardDeviation"
 
 spawn /usr/local/bin/speedtest-cli --server 5133
 expect "Retrieving speedtest.net configuration..."
