@@ -65,8 +65,8 @@ if {$dl100MBSeconds < 1} {
 	puts "1GB DL SECONDS: $dl1GBSeconds"
 }
 
-spawn iperf --port 5002 --udp --format m -c 64.20.26.68 
-expect -re ".*Server Report:.* (\[0-9\]+\.\[0-9\]+) Mbits/sec +(\[0-9\]+\.\[0-9\]+) ms +(\[0-9\]+)/ +(\[0-9\]+) " {
+spawn iperf --port 5002 --udp --format k -c 64.20.26.68 
+expect -re ".*Server Report:.* (\[0-9\]+\.\[0-9\]+) Kbits/sec +(\[0-9\]+\.\[0-9\]+) ms +(\[0-9\]+)/ +(\[0-9\]+) " {
 	set iperfBandwidthUDP $expect_out(1,string)
 	set iperfJitterUDP $expect_out(2,string)
 	set iperfLostUDP $expect_out(3,string)
@@ -75,8 +75,8 @@ expect -re ".*Server Report:.* (\[0-9\]+\.\[0-9\]+) Mbits/sec +(\[0-9\]+\.\[0-9\
 puts "IPERF UDP BANDWIDTH $iperfBandwidthUDP JITTER: $iperfJitterUDP LOST: $iperfLostUDP TOTAL: $iperfTotalUDP"
 
 
-spawn iperf --port 5001 --format m -c 64.20.26.68 
-expect -re ".* (\[0-9\]+\.\[0-9\]+) Mbits/sec.*" {
+spawn iperf --port 5001 --format k -c 64.20.26.68 
+expect -re ".* (\[0-9\]+\.\[0-9\]+) Kbits/sec.*" {
 	set iperfBandwidthTCP $expect_out(1,string)
 }
 puts "IPERF TCP BANDWIDTH $iperfBandwidthTCP"
@@ -121,5 +121,5 @@ expect -re ".*Upload: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
 	set upload $expect_out(1,string)
 	set uploadUOM $expect_out(2,string)
 }
-puts $outputFile "curl --header Content-Type:application/json --header token:$token --request PUT --data '{\"distanceUOM\":\"$distanceUOM\",\"latencyUOM\":\"$latencyUOM\",\"downloadUOM\":\"$downloadUOM\",\"uploadUOM\":\"$uploadUOM\",\"hostedBy\":\"$hostedBy\",\"distance\":$distance,\"latency\":$latency,\"download\":$download,\"upload\":$upload,\"pingPacketsTransmitted\":$pingPacketsTransmitted,\"pingPacketsReceived\":$pingPacketsReceived,\"pingPacketLoss\":$pingPacketLoss,\"pingTime\":$pingTime,\"pingMinimum\":$pingMinimum,\"pingAverage\":$pingAverage,\"pingMaximum\":$pingMaximum,\"pingStandardDeviation\":$pingStandardDeviation,\"hostname\":$hostname}' https://e.hometelco.com/a/SpeedtestUpload"
+puts $outputFile "curl --header Content-Type:application/json --header token:$token --request PUT --data '{\"distanceUOM\":\"$distanceUOM\",\"latencyUOM\":\"$latencyUOM\",\"downloadUOM\":\"$downloadUOM\",\"uploadUOM\":\"$uploadUOM\",\"hostedBy\":\"$hostedBy\",\"distance\":$distance,\"latency\":$latency,\"download\":$download,\"upload\":$upload,\"pingPacketsTransmitted\":$pingPacketsTransmitted,\"pingPacketsReceived\":$pingPacketsReceived,\"pingPacketLoss\":$pingPacketLoss,\"pingTime\":$pingTime,\"pingMinimum\":$pingMinimum,\"pingAverage\":$pingAverage,\"pingMaximum\":$pingMaximum,\"pingStandardDeviation\":$pingStandardDeviation,\"hostname\":$hostname,\"dl10MBSeconds\":$dl10MBSeconds,\"dl100MBSeconds\":$dl100MBSeconds,\"dl1GBSeconds\":$dl1GBSeconds,\"iperfBandwidthUDP\":$iperfBandwidthUDP,\"iperfTotalUDP\":$iperfTotalUDP,\"iperfLostUDP\":$iperfLostUDP,\"iperfJitterUDP\":$iperfJitterUDP,\"iperfBandwidthTCP\":$iperfBandwidthTCP}' https://e.hometelco.com/a/SpeedtestUpload"
 close $outputFile
