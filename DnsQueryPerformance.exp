@@ -20,7 +20,7 @@ foreach server $servers {
     puts "$fakeDomainName"
     set queries [expr $queries+1]
     spawn dig @$server +trace "$fakeDomainName"
-    expect -re ".*Received \[0-9\]+ bytes from .* in (\[0-9\]+).*" {
+    expect -re ".*Received \[0-9\]+ bytes from .* in (\[0-9\]+) ms.*" {
       set queryTime $expect_out(1,string)
       set received [expr $received+1] 
       puts "QUERY TIME: $queryTime for query number: $counter server: $server name: $fakeDomainName"
