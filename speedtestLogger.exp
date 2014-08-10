@@ -10,12 +10,51 @@
 #
 # Requires expect. sudo apt-get install expect
 #
+proc randomString len {
+ set s "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789"
+ for {set i 0} {$i <= $len} {incr i} {
+    append p [string index $s [expr {int([string length $s]*rand())}]]
+ }
+ return $p
+}
+
 set server "scnx-ng01.homesc.com"
 set token [lindex $argv 0]
 set outputFile [open /tmp/speedtestLoggerOutput.sh w]
 set hostname [exec /bin/hostname]
 #exp_internal 1
 set timeout 600
+
+
+set digMinimum 0
+set digMaximum 0
+set digReceived 0
+set digQueries 0
+set digServers {dns1.homesc.com dns2.homesc.com}
+foreach digServer $digServers { 
+  set quantity 10
+  set counter 0
+  while { $counter < $quantity } {
+    set counter [expr $counter+1]
+    set fakeDomainName [randomString 60].com
+    puts "$fakeDomainName"
+    set digQueries [expr $digQueries+1]
+    spawn dig @$digServer +trace "$fakeDomainName"
+    expect -re ".*Received \[0-9\]+ bytes from .* in (\[0-9\]+) ms.*" {
+      set digQueryTime $expect_out(1,string)
+      set digReceived [expr $digReceived+1] 
+      puts "QUERY TIME: $digQueryTime for query number: $counter Server: $digServer name: $fakeDomainName"
+      if { $digQueryTime > $digMaximum } {
+        set digMaximum $digQueryTime
+      } 
+      if { $digQueryTime < $digMinimum || $digMinimum == 0 } {
+        set digMinimum $digQueryTime
+      }
+    }
+    puts "Max: $digMaximum Min: $digMinimum Queries: $digQueries Received: $digReceived"
+  }
+}
+
 
 
 
@@ -69,8 +108,8 @@ expect {
 	}
 }
 puts "100MB DL SECONDS: $dl100MBSeconds"
-# todo change to 90  in the if below
-if {$dl100MBSeconds < 90} {
+# todo change to 60 in the if below
+if {$dl100MBSeconds < 60} {
 	spawn wget --output-document /tmp/test.mpg http://$server/1GB.mpg
 	expect {
 		-re "/s + in +(\[0-9\])m +(\[0-9\]*\.?\[0-9\]+)s" {
@@ -123,5 +162,5 @@ expect -re ".*Upload: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
 	set upload $expect_out(1,string)
 	set uploadUOM $expect_out(2,string)
 }
-puts $outputFile "curl --header Content-Type:application/json --header token:$token --request PUT --data '{\"distanceUOM\":\"$distanceUOM\",\"latencyUOM\":\"$latencyUOM\",\"downloadUOM\":\"$downloadUOM\",\"uploadUOM\":\"$uploadUOM\",\"hostedBy\":\"$hostedBy\",\"distance\":$distance,\"latency\":$latency,\"download\":$download,\"upload\":$upload,\"pingTransmitted\":$pingPacketsTransmitted,\"pingReceived\":$pingPacketsReceived,\"pingPacketLoss\":$pingPacketLoss,\"pingTime\":$pingTime,\"pingMinimum\":$pingMinimum,\"pingAverage\":$pingAverage,\"pingMaximum\":$pingMaximum,\"pingStandardDeviation\":$pingStandardDeviation,\"hostname\":$hostname,\"dl10MB\":$dl10MBSeconds,\"dl100MB\":$dl100MBSeconds,\"dl1GB\":$dl1GBSeconds,\"iperfBandwidthUDP\":$iperfBandwidthUDP,\"iperfTotalUDP\":$iperfTotalUDP,\"iperfLostUDP\":$iperfLostUDP,\"iperfJitterUDP\":$iperfJitterUDP,\"iperfBandwidthTCP\":$iperfBandwidthTCP}' https://e.hometelco.com/a/SpeedtestUpload"
+puts $outputFile "curl --header Content-Type:application/json --header token:$token --request PUT --data '{\"distanceUOM\":\"$distanceUOM\",\"latencyUOM\":\"$latencyUOM\",\"downloadUOM\":\"$downloadUOM\",\"uploadUOM\":\"$uploadUOM\",\"hostedBy\":\"$hostedBy\",\"distance\":$distance,\"latency\":$latency,\"download\":$download,\"upload\":$upload,\"pingTransmitted\":$pingPacketsTransmitted,\"pingReceived\":$pingPacketsReceived,\"pingPacketLoss\":$pingPacketLoss,\"pingTime\":$pingTime,\"pingMinimum\":$pingMinimum,\"pingAverage\":$pingAverage,\"pingMaximum\":$pingMaximum,\"pingStandardDeviation\":$pingStandardDeviation,\"hostname\":$hostname,\"dl10MB\":$dl10MBSeconds,\"dl100MB\":$dl100MBSeconds,\"dl1GB\":$dl1GBSeconds,\"iperfBandwidthUDP\":$iperfBandwidthUDP,\"iperfTotalUDP\":$iperfTotalUDP,\"iperfLostUDP\":$iperfLostUDP,\"iperfJitterUDP\":$iperfJitterUDP,\"iperfBandwidthTCP\":$iperfBandwidthTCP,\"digMinimum\":$digMinimum,\"digMaximum\":$digMaximum,\"digQueries\":$digQueries,\"digReceived\":$digReceived}' https://e.hometelco.com/a/SpeedtestUpload"
 close $outputFile
