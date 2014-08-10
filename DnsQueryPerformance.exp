@@ -1,0 +1,36 @@
+#!/usr/bin/expect
+proc randomString len {
+ set s "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789"
+ for {set i 0} {$i <= $len} {incr i} {
+    append p [string index $s [expr {int([string length $s]*rand())}]]
+ }
+ return $p
+}
+set minimum 0
+set maximum 0
+set received 0
+set queries 0
+set servers {dns1.homesc.com dns2.homesc.com}
+foreach server $servers { 
+  set quantity 5
+  set counter 0
+  while { $counter < $quantity } {
+    set counter [expr $counter+1]
+    set fakeDomainName [randomString 60].com
+    puts "$fakeDomainName"
+    set queries [expr $queries+1]
+    spawn dig @$server +trace "$fakeDomainName"
+    expect -re ".*Received \[0-9\]+ bytes from .* in (\[0-9\]+).*" {
+      set queryTime $expect_out(1,string)
+      set received [expr $received+1] 
+      puts "QUERY TIME: $queryTime for query number: $counter server: $server name: $fakeDomainName"
+      if { $queryTime > $maximum } {
+        set maximum $queryTime
+      } 
+      if { $queryTime < $minimum || $minimum == 0 } {
+        set minimum $queryTime
+      }
+    }
+    puts "Max: $maximum Min: $minimum Queries: $queries Received: $received"
+  }
+}
