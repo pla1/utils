@@ -140,7 +140,7 @@ expect -re ".* (\[0-9\]+\.\[0-9\]+) Kbits/sec.*" {
 }
 puts "IPERF TCP BANDWIDTH $iperfBandwidthTCP"
 
-spawn /usr/local/bin/speedtest-cli --server 5133
+spawn /usr/local/bin/speedtest-cli --server 4211
 expect "Retrieving speedtest.net configuration..."
 expect "Retrieving speedtest.net server list..."
 expect -re ".*Testing from .*\\((\[0-9\]{1,3}\.\[0-9\]{1,3}\.\[0-9\]{1,3}\.\[0-9\]{1,3})\\).*" {
