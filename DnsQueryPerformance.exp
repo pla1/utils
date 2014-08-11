@@ -6,14 +6,15 @@ proc randomString len {
  }
  return $p
 }
-set minimum 0
-set maximum 0
-set received 0
-set queries 0
-set servers {dns1.homesc.com dns2.homesc.com}
+
+set servers {dns1.homesc.com dns2.homesc.com 8.8.8.8 8.8.4.4}
 foreach server $servers { 
   set quantity 5
   set counter 0
+  set minimum 0
+  set maximum 0
+  set received 0
+  set queries 0
   while { $counter < $quantity } {
     set counter [expr $counter+1]
     set fakeDomainName [randomString 60].com
@@ -31,6 +32,6 @@ foreach server $servers {
         set minimum $queryTime
       }
     }
-    puts "Max: $maximum Min: $minimum Queries: $queries Received: $received"
   }
+  puts "DNS Server: $server Max: $maximum Min: $minimum Queries: $queries Received: $received"
 }
