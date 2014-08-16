@@ -2,6 +2,9 @@
 #
 # Refresh Google Plus stream via kiosk mode
 #
+sed -i -e 's/"exit_type": "Crashed",/"exit_type": "Normal",/g' ~/.config/google-chrome/Default/Preferences
+google-chrome --kiosk https://plus.google.com &
+sleep 3
 while :
 do
 	win=$(xdotool search --onlyvisible "Google+" | head -1)
