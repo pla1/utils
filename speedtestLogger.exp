@@ -163,27 +163,27 @@ expect -re ".* (\[0-9\]+\.\[0-9\]+) Kbits/sec.*" {
 }
 puts "IPERF TCP BANDWIDTH $iperfBandwidthTCP"
 
-spawn /usr/local/bin/speedtest-cli --server 4211
-expect "Retrieving speedtest.net configuration..."
-expect "Retrieving speedtest.net server list..."
-expect -re ".*Testing from .*\\((\[0-9\]{1,3}\.\[0-9\]{1,3}\.\[0-9\]{1,3}\.\[0-9\]{1,3})\\).*" {
-	 set fromIpAddress $expect_out(1,string)
-}
-expect -re ".*Hosted by (.*) \\\[(\[0-9\]+\.\[0-9\]+)(.*)\\\]: (\[0-9\]+\.\[0-9\]+)(.*)\r\n.*"  {
-	set hostedBy $expect_out(1,string)
-	set distance $expect_out(2,string)
-	set distanceUOM $expect_out(3,string)
-	set latency $expect_out(4,string)
-	set latencyUOM $expect_out(5,string)
-}
-
-expect -re ".*Download: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
-	set download $expect_out(1,string)
-	set downloadUOM $expect_out(2,string)
-}
-expect -re ".*Upload: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
-	set upload $expect_out(1,string)
-	set uploadUOM $expect_out(2,string)
-}
+#spawn /usr/local/bin/speedtest-cli --server 4211
+#expect "Retrieving speedtest.net configuration..."
+#expect "Retrieving speedtest.net server list..."
+#expect -re ".*Testing from .*\\((\[0-9\]{1,3}\.\[0-9\]{1,3}\.\[0-9\]{1,3}\.\[0-9\]{1,3})\\).*" {
+#	 set fromIpAddress $expect_out(1,string)
+#}
+#expect -re ".*Hosted by (.*) \\\[(\[0-9\]+\.\[0-9\]+)(.*)\\\]: (\[0-9\]+\.\[0-9\]+)(.*)\r\n.*"  {
+#	set hostedBy $expect_out(1,string)
+#	set distance $expect_out(2,string)
+#	set distanceUOM $expect_out(3,string)
+#	set latency $expect_out(4,string)
+#	set latencyUOM $expect_out(5,string)
+#}
+#
+#expect -re ".*Download: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
+#	set download $expect_out(1,string)
+#	set downloadUOM $expect_out(2,string)
+#}
+#expect -re ".*Upload: (\[0-9\]+\.\[0-9\]+) (.*)\r\n.*" {
+#	set upload $expect_out(1,string)
+#	set uploadUOM $expect_out(2,string)
+#}
 puts $outputFile "curl --header Content-Type:application/json --header token:$token --request PUT --data '{\"distanceUOM\":\"$distanceUOM\",\"latencyUOM\":\"$latencyUOM\",\"downloadUOM\":\"$downloadUOM\",\"uploadUOM\":\"$uploadUOM\",\"hostedBy\":\"$hostedBy\",\"distance\":$distance,\"latency\":$latency,\"download\":$download,\"upload\":$upload,\"pingTransmitted\":$pingPacketsTransmitted,\"pingReceived\":$pingPacketsReceived,\"pingPacketLoss\":$pingPacketLoss,\"pingTime\":$pingTime,\"pingMinimum\":$pingMinimum,\"pingAverage\":$pingAverage,\"pingMaximum\":$pingMaximum,\"pingStandardDeviation\":$pingStandardDeviation,\"hostname\":$hostname,\"dl10MB\":$dl10MBSeconds,\"dl100MB\":$dl100MBSeconds,\"dl1GB\":$dl1GBSeconds,\"iperfBandwidthUDP\":$iperfBandwidthUDP,\"iperfTotalUDP\":$iperfTotalUDP,\"iperfLostUDP\":$iperfLostUDP,\"iperfJitterUDP\":$iperfJitterUDP,\"iperfBandwidthTCP\":$iperfBandwidthTCP,\"digMinimum\":$digMinimum,\"digMaximum\":$digMaximum,\"digQueries\":$digQueries,\"digReceived\":$digReceived}' https://e.hometelco.com/a/SpeedtestUpload"
 close $outputFile
