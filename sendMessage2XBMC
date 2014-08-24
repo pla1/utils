@@ -8,5 +8,5 @@ then
   echo "Pass a message. For example: ./sendMessage2XBMC 'This is a test message'"
   exit -1
 fi
-curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"GUI.ShowNotification","params":{"title":"uTorrent","message":"$message"},"id":1}' http://i3c.pla.lcl:8080/jsonrpc
+curl -X POST -H "Content-Type: application/json" -d "{\"jsonrpc\":\"2.0\",\"method\":\"GUI.ShowNotification\",\"params\":{\"title\":\"Message\",\"message\":\"$message\"},\"id\":1}" http://i3c.pla.lcl:8080/jsonrpc
 
