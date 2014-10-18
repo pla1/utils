@@ -31,25 +31,51 @@
     <pictures>
         <default pathversion="1"></default>
         <source>
-            <name>Reuters Top News</name>
-            <path pathversion="1">http://xbmc-rocks.com/go/?q=http://feeds.reuters.com/reuters/topNews</path>
+            <name>NPR Arts &amp; Culture</name>
+            <path pathversion="1">rss://xbmc-rocks.com/go?q=http://www.npr.org/rss/rss.php?id=1008</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
+            <name>NPR Digital Culture</name>
+            <path pathversion="1">rss://xbmc-rocks.com/go?q=http://www.npr.org/rss/rss.php?id=1049</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>Reuters Environment</name>
+            <path pathversion="1">rss://xbmc-rocks.com/go?q=http://feeds.reuters.com/reuters/environment</path>
+            <allowsharing>true</allowsharing>
+        </source>
+         <source>
+            <name>Reuters Oddly Enough News</name>
+            <path pathversion="1">rss://xbmc-rocks.com/go?q=http://feeds.reuters.com/reuters/oddlyEnoughNews</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>Reuters Sports News</name>
+            <path pathversion="1">rss://xbmc-rocks.com/go?q=http://feeds.reuters.com/reuters/sportsNews</path>
+            <allowsharing>true</allowsharing>
+        </source>
+         <source>
+            <name>Reuters Top Business</name>
+            <path pathversion="1">rss://xbmc-rocks.com/go?q=http://feeds.reuters.com/reuters/businessNews</path>
+            <allowsharing>true</allowsharing>
+        </source>
+       <source>
             <name>Reuters Technology News</name>
-            <path pathversion="1">http://xbmc-rocks.com/go/?q=http://feeds.reuters.com/reuters/technologyNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go?q=http://feeds.reuters.com/reuters/technologyNews</path>
             <allowsharing>true</allowsharing>
         </source>        
         <source>
-            <name>Reuters Environment</name>
-            <path pathversion="1">http://xbmc-rocks.com/go/?q=http://feeds.reuters.com/reuters/environment</path>
+            <name>Reuters Top News</name>
+            <path pathversion="1">rss://xbmc-rocks.com/go?q=http://feeds.reuters.com/reuters/topNews</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
-            <name>Time</name>
+            <name>Time Of Day</name>
             <path pathversion="1">rss://pla1.net/time.rss</path>
             <allowsharing>true</allowsharing>
         </source>
+
     </pictures>
     <files>
         <default pathversion="1"></default>
