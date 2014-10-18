@@ -1,3 +1,7 @@
+<!--
+XBMC / Kodi sources. 
+On a Linux system, stick this file in your ~/.xbmc/userdata directory. 
+-->
 <sources>
     <programs>
         <default pathversion="1"></default>
