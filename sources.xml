@@ -1,3 +1,7 @@
+<!--
+XBMC / Kodi sources. 
+On a Linux system, stick this file in your ~/.xbmc/userdata directory. 
+-->
 <sources>
     <programs>
         <default pathversion="1"></default>
@@ -18,18 +22,18 @@
     <music>
         <default pathversion="1"></default>
         <source>
-            <name>HDHomeRun Live DMS 13128D0F</name>
-            <path pathversion="1">upnp://464A7641-D218-3536-9C00-451A8849D7E8/PremiumCableTV/</path>
-            <allowsharing>true</allowsharing>
-        </source>
-        <source>
-            <name>server0: MythTV AV Media Server</name>
-            <path pathversion="1">upnp://{8cdd0d35-8569-45d8-bcfa-3b1333ca963/Music/</path>
+            <name>Music on server0</name>
+            <path pathversion="1">/mnt/server0/Music/</path>
             <allowsharing>true</allowsharing>
         </source>
     </music>
     <pictures>
         <default pathversion="1"></default>
+        <source>
+            <name>NFL</name>
+            <path pathversion="1">rss://xbmc-rocks.com/nfl.rss</path>
+            <allowsharing>true</allowsharing>
+        </source>
         <source>
             <name>NPR Arts &amp; Culture</name>
             <path pathversion="1">rss://xbmc-rocks.com/go?q=http://www.npr.org/rss/rss.php?id=1008</path>
