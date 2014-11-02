@@ -19,5 +19,5 @@ done
 cd "$workDirectory"
 dotGif=".gif"
 echo "Creating gif file: $workDirectory/$fileName$dotGif from rotated images."
-convert -resize 800 -loop 0 -layers optimize -limit memory 2000 * "$workDirectory/$fileName$dotGif"
+convert -loop 0 -layers optimize -limit memory 2000 * "$workDirectory/$fileName$dotGif"
 xdg-open "$workDirectory/$fileName$dotGif"
