@@ -1,0 +1,22 @@
+[Desktop Entry]
+Name=MythTV Live TV
+Exec=mythavtest
+Type=Application
+Encoding=UTF-8
+Icon=mythtv
+Categories=GNOME;Application;AudioVideo;Audio;Video
+X-AppInstall-Package=mythtv
+
+X-Ayatana-Desktop-Shortcuts=1920x1080;800x450
+
+[800x450 Shortcut Group]
+Name=800x450
+Exec=mythfrontend --geometry 800x450
+OnlyShowIn=Unity
+
+[1920x1080 Shortcut Group]
+Name=1920x1080
+Exec=mythfrontend
+OnlyShowIn=Unity
+
+
