@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# Converts MAC address to the three difference formats. 1. XX:XX:XX:XX:XX:XX 2. XXXX.XXXX.XXXX 3. XX-XX-XX-XX-XX-XX
+# Copies the output to the clipboard via Parcellite the clipboard manager.
+#
 MAC="$1"
 MAC=${MAC//[:|\-|.]/}
 LENGTH=${#MAC}
