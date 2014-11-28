@@ -18,14 +18,36 @@ On a Linux system, stick this file in your ~/.xbmc/userdata directory.
             <path pathversion="1">/mnt/server0/Videos/</path>
             <allowsharing>true</allowsharing>
         </source>
+
     </video>
     <music>
         <default pathversion="1"></default>
+        <source>
+            <name>Android Buffet Oggcast</name>
+            <path pathversion="1">rss://www.androidbuffet.com/feed/oggcast</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>Bad Voltage Oggcast</name>
+            <path pathversion="1">rss://www.badvoltage.org/feed/ogg/</path>
+            <allowsharing>true</allowsharing>
+        </source>
         <source>
             <name>Music on server0</name>
             <path pathversion="1">/mnt/server0/Music/</path>
             <allowsharing>true</allowsharing>
         </source>
+        <source>
+            <name>Linux Outlaws Oggcast - </name>
+            <path pathversion="1">rss://feeds.feedburner.com/linuxoutlaws-ogg</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>NPR Oggcast</name>
+            <path pathversion="1">rss://hackerpublicradio.org/hpr_ogg_rss.php</path>
+            <allowsharing>true</allowsharing>
+        </source>
+
     </music>
     <pictures>
         <default pathversion="1"></default>
