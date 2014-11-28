@@ -33,6 +33,11 @@ On a Linux system, stick this file in your ~/.xbmc/userdata directory.
             <allowsharing>true</allowsharing>
         </source>
         <source>
+            <name>The Dick Turpin Road Show</name>
+            <path pathversion="1">rss://feeds.feedburner.com/tdtrs-ogg</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
             <name>Music on server0</name>
             <path pathversion="1">/mnt/server0/Music/</path>
             <allowsharing>true</allowsharing>
