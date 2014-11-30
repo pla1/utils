@@ -4,8 +4,8 @@
 #
 sed -i -e 's/"exit_type": "Crashed",/"exit_type": "Normal",/g' ~/.config/google-chrome/Default/Preferences
 google-chrome --kiosk https://plus.google.com &
-echo "Sleeping for 3 seconds."
-sleep 3
+echo "Sleeping for a few seconds."
+sleep 5
 while :
 do
 	win=$(xdotool search --onlyvisible --name "Google+" | head -1)
