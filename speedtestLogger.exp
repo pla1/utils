@@ -67,7 +67,7 @@ foreach digServer $digServers {
     set fakeDomainName [randomString 60].com
     puts "$fakeDomainName"
     set digQueries [expr $digQueries+1]
-    spawn dig @$digServer +trace "$fakeDomainName"
+    spawn dig @$digServer +trace +tcp "$fakeDomainName"
     expect -re ".*Received \[0-9\]+ bytes from .* in (\[0-9\]+) ms.*" {
       set digQueryTime $expect_out(1,string)
       set digReceived [expr $digReceived+1] 
