@@ -5,4 +5,3 @@
 #
 sudo apt-get update
 sudo apt-get install parcellite gimp hdhomerun-config openssh-server rdesktop git wireshark compizconfig-settings-manager pwgen ipcalc curl vpnc ttf-mscorefonts-installer guvcview git htop nmap iotop iperf screen whois mediainfo mplayer vlc python-pip fail2ban expect iptraf iperf at
-sudo pip install speedtest-cli
