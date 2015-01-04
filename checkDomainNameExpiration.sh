@@ -17,12 +17,13 @@ then
 fi
 LABEL="Registrar Registration Expiration Date: "
 THRESHOLD_DAYS=35
-expirationDate=$(whois "$DOMAIN_NAME" | grep "$LABEL" | cut -d':' -f 2 | cut -d' ' -f 2)
+#expirationDate=$(whois "$DOMAIN_NAME" | grep "$LABEL" | cut -d':' -f 2 | cut -d' ' -f 2)
+expirationDate=$(whois "$DOMAIN_NAME" | grep "$LABEL" |  grep -Po '\d{4}-\d{2}-\d{2}')
 if [ -z "$expirationDate" ]
 then
   message="WHOIS query did not return a date string for domain name $DOMAIN_NAME"
   log "$message"
-  echo "$message" | mail -s "$message" "$EMAIL_ADDRESS"
+  echo "$message" | mail -s "$message" "root"
   exit
 fi
 d1=$(date -d "$expirationDate" +%s)
