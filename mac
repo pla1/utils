@@ -14,10 +14,10 @@ MAC=$(echo $MAC | tr '[:lower:]' '[:upper:]')
 MAC1=${MAC:0:2}:${MAC:2:2}:${MAC:4:2}:${MAC:6:2}:${MAC:8:2}:${MAC:10:2}
 MAC2=${MAC:0:2}-${MAC:2:2}-${MAC:4:2}-${MAC:6:2}-${MAC:8:2}-${MAC:10:2}
 MAC3=${MAC:0:4}.${MAC:4:4}.${MAC:8:4}
-echo "$MAC1" | parcellite
-sleep 1
-echo "$MAC2" | parcellite
-sleep 1
-echo "$MAC3" | parcellite
-sleep 1
-echo "$MAC" | parcellite
+echo "$MAC1" | clipit
+#sleep 1
+echo "$MAC2" | clipit
+#sleep 1
+echo "$MAC3" | clipit
+#sleep 1
+echo "$MAC" | clipit
