@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# Kodi JSON examples.
+#
+#
 cr=$'\n\n'
 hostname="i3c.pla.lcl"
 port=8080
