@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Kodi JSON examples.
+# Kodi JSON examples.		
 #
 #
 cr=$'\n\n'
@@ -33,7 +33,7 @@ curl --user "$user:$password" --header "Content-Type: application/json" --data '
 read -p "$cr Press ENTER to play a single YouTube video"
 
 
-curl --user "$user:$password" --header "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"Player.Open","params":{"item": {"file":"plugin://plugin.video.youtube/?action=play_video&videoid=tYThqD2pQbI"}},"id":1}' "http://$hostname:$port/jsonrpc"
+curl --user "$user:$password" --header "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"Player.Open","params":{"item": {"file":"plugin://plugin.video.youtube/?action=play_video&videoid=Cj6ho1-G6tw"}},"id":1}' "http://$hostname:$port/jsonrpc"
 
 read -p "$cr Press ENTER to toggle mute"
 
