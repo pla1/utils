@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Kodi JSON examples.		
+# Kodi JSON examples.
 #
 #
 cr=$'\n\n'
