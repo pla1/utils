@@ -2,7 +2,7 @@
 Name=Mute XBMC 
 Type=Application
 # I put the icon file in ~/.local/share/icons
-Icon=Mute.png
+Icon=/home/htplainf/utils/mute.png
 Exec=curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc": "2.0", "method": "Application.SetMute", "params": {"mute":"toggle"}, "id": 1}' http://i3c.pla.lcl:8080/jsonrpc
 X-Ayatana-Desktop-Shortcuts=Mute;10;20;30;40;50;60;70;80;90;100
 
