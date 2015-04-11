@@ -3,6 +3,8 @@
 # Play a HDHomeRun channel. Pass the channel call letters. On the initial run this will ask you 
 # for the IP address of the HDHomeRun device. 
 #
+# Uses mplayer. Change the last line in this script to your favorite media player. 
+#
 CURLY="[{}]"
 CR="\n"
 BRACKETS="[\]\[]"
