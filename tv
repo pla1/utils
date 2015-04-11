@@ -1,7 +1,13 @@
 #!/bin/bash
 #
-# Play a HDHomeRun channel. Pass the channel call letters. On the initial run this will ask you 
-# for the IP address of the HDHomeRun device. 
+# Play a HDHomeRun channel. Pass the channel call sign. On the initial run this will ask you 
+# for the IP address of the HDHomeRun device and store the IP address in ~/.hdhrIpAddress. 
+#
+# This script lives here: https://github.com/pla1/utils/blob/master/tv
+#
+# Wikipedia TV station call signs.
+# http://en.wikipedia.org/wiki/List_of_television_stations_in_the_United_States_by_call_sign_(initial_letter_K) 
+# http://en.wikipedia.org/wiki/List_of_television_stations_in_the_United_States_by_call_sign_(initial_letter_W)
 #
 # Uses mplayer. Change the last line in this script to your favorite media player. 
 #
@@ -19,7 +25,7 @@ lineup=$(curl --silent "http://$IP/lineup.json")
 if [[ "$lineup" != *"GuideNumber"* ]]
 then
   rm -f ~/.hdhrIpAddress
-  echo "Missing channel lineup. Check the IP address $IP. Also make sure you have the latest firmware on your HDHomeRun device. https://www.silicondust.com/support/downloads/" 
+  echo -e "\n\nMissing channel lineup. Check the IP address $IP. Also make sure you have the latest firmware on your HDHomeRun device. https://www.silicondust.com/support/downloads/\n\n" 
   exit 1
 fi
 newLineup="${lineup//$CURLY/$CR}"
