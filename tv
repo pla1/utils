@@ -13,7 +13,7 @@ then
   echo "$IP" > ~/.hdhrIpAddress
 fi
 callSign="$1"
-lineup=$(curl --silent http://$IP/lineup.json)
+lineup=$(curl --silent "http://$IP/lineup.json")
 if [ -z "$lineup" ]
 then
   rm -f ~/.hdhr
