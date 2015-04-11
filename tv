@@ -14,14 +14,20 @@ then
 fi
 callSign="$1"
 lineup=$(curl --silent "http://$IP/lineup.json")
-if [ -z "$lineup" ]
+if [[ "$lineup" != *"GuideNumber"* ]]
 then
-  rm -f ~/.hdhr
+  rm -f ~/.hdhrIpAddress
   echo "Missing channel lineup. Check the IP address $IP. Also make sure you have the latest firmware on your HDHomeRun device. https://www.silicondust.com/support/downloads/" 
+  exit 1
 fi
 newLineup="${lineup//$CURLY/$CR}"
 lineup="${newLineup//$BRACKETS/}"
 line=$(echo -e "$lineup" | grep -i "$callSign")
+if [ -z "$line" ]
+then
+  echo "Call sign \"$callSign\" not found."
+  exit 1
+fi
 urlString=$(echo "$line" | cut -d , -f3)
 url=$(echo "$urlString" | cut -d \" -f4)
 echo -e "\n\nPlaying $url\n\n"
