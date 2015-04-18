@@ -52,6 +52,11 @@ On a Linux system, stick this file in your ~/.xbmc/userdata directory.
             <path pathversion="1">rss://hackerpublicradio.org/hpr_ogg_rss.php</path>
             <allowsharing>true</allowsharing>
         </source>
+        <source>
+            <name>Rotten Tomatoes Podcast</name>
+            <path pathversion="1">rss://feeds.feedburner.com/RTPodcast</path>
+            <allowsharing>true</allowsharing>
+        </source>
 
         <source>
             <name>Ubuntu UK Oggcast</name>
