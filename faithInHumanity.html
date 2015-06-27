@@ -1,0 +1,46 @@
+<html>
+<head>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <title>Faith In Humanity</title>
+  <script>
+  google.load('visualization', '1', {'packages':['annotationchart']});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('date', 'Date');
+    data.addColumn('number', 'Level');
+    data.addColumn('string', 'Event');
+
+    data.addRows([
+      [new Date(2015, 5, 16, 0, 0, 0, 0), 0, 'Pessimistic status quo'],
+      [new Date(2015, 5, 17, 21, 5, 0, 0), -100, 'Emanuel AME Church shooting'],
+      [new Date(2015, 5, 18, 10, 44, 0, 0), -50, 'Charleston 9 racist murderer apprehended'],
+      [new Date(2015, 5, 20, 12, 0, 0, 0), 30, 'Charleston is showing the world that love concurs hate'],
+      [new Date(2015, 5, 21, 19, 30, 0, 0), 50, 'Charleston Unity Chain'],
+      [new Date(2015, 5, 22, 12, 0, 0, 0), 60, 'Gov Nikki Haley calls for removal of Confederate flag from Statehouse grounds'],
+      [new Date(2015, 5, 23, 12, 0, 0, 0), 65, 'Large retailers stop selling merchandise with the Confederate flag'],
+      [new Date(2015, 5, 24, 12, 0, 0, 0), 70, 'SCOTUS upholds nationwide health care law subsidies'],
+      [new Date(2015, 5, 26, 11, 9, 0, 0), 80, 'SCOTUS rules in favor of marriage equality'],
+      [new Date(2015, 5, 26, 13, 0, 0, 0), 90, 'POTUS eulogizes Rev Pinckney'],
+      [new Date(2015, 5, 27, 12, 0, 0, 0), 90, 'Faith in humanity restored']
+    ]);
+
+    var chart = new google.visualization.AnnotationChart(document.getElementById('chart_div'));
+
+    var options = {
+      displayAnnotations: true,
+      height: 500
+    };
+
+    chart.draw(data, options);
+  }
+  </script>
+</head>
+
+<body>
+  <h1>Faith In Humanity June 16 thru June 27, 2015</h1>
+  <div id="chart_div"></div>
+  <p>We have a long way to go but I'm hopeful again.<br> Patrick L Archibald (PLA) 06/27/2015</p>
+</body>
+</html>
