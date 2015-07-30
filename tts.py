@@ -1,4 +1,13 @@
 #!/usr/bin/python
+#
+# Translates text to voice using Ivona.com service.
+# This should be called from an Asterisk dialplan.
+# Example:
+# [incoming]
+# exten => 8438431234567,1,Answer()
+#  same => n,agi(tts.py,"This text will be translated to voice by Ivona.com.","demo.mp3","2")
+#  same => n,Hangup()
+#
 import sys
 import os
 import pyvona
