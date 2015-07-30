@@ -5,7 +5,7 @@
 # Example:
 # [incoming]
 # exten => 8438431234567,1,Answer()
-#  same => n,agi(tts.py,"This text will be translated to voice by Ivona.com.","2")
+#  same => n,agi(tts.py,"This text will be translated to voice by Ivona.com.","2","fast")
 #  same => n,Hangup()
 #
 import sys,os,pyvona,datetime,logging,hashlib
