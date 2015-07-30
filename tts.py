@@ -5,7 +5,7 @@
 # Example:
 # [incoming]
 # exten => 8438431234567,1,Answer()
-#  same => n,agi(tts.py,"This text will be translated to voice by Ivona.com.","demo.mp3","2")
+#  same => n,agi(tts.py,"This text will be translated to voice by Ivona.com.","2")
 #  same => n,Hangup()
 #
 import sys,os,pyvona,datetime,logging,hashlib
@@ -27,7 +27,11 @@ while True:
   logging.info(line)
 text=sys.argv[1]
 escapeDigits=sys.argv[2]
+rate = 'medium'
+if len(sys.argv) == 4:
+  rate=sys.argv[3]
 md5=hashlib.md5()
+md5.update(rate)
 md5.update(text);
 fileName=md5.hexdigest()+".mp3"
 directory="/tmp/"
@@ -43,7 +47,7 @@ AWS_SECRET_KEY = keys[1].strip('\n')
 voice = pyvona.create_voice(AWS_ACCESS_KEY, AWS_SECRET_KEY)
 #print(v.list_voices())
 voice.voice_name = "Salli"
-voice.speech_rate = 'fast'
+voice.speech_rate = rate
 voice.codec = 'mp3'
 voice.fetch_voice(text,directory+fileName)
 return_code = call(["/usr/bin/avconv","-loglevel","quiet","-y","-i",sourceFile,"-ar","8000","-ac","1","-ab","64",destinationFile])
