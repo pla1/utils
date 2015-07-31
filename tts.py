@@ -2,13 +2,15 @@
 #
 # Translates text to voice using Ivona.com service.
 # This should be called from an Asterisk dialplan.
-# Example:
+# The text should be in the call file as variables text0, text1, text2, etc...
+# Example below sets the variable in the dial plan instead of in call file:
 # [incoming]
-# exten => 8438431234567,1,Answer()
-#  same => n,agi(tts.py,This text will be translated to voice by Ivona.com.,1234567890,fast)
+# exten => 8431234567,1,Answer()
+#  same => n,Set(text0=This is some text that Ivona will convert to speech.)
+#  same => n,agi(tts.py,1234567890,fast)
 #  same => n,Hangup()
 #
-import sys,os,pyvona,datetime,logging,hashlib,re
+import sys,os,pyvona,datetime,logging,hashlib,re,string
 from subprocess import call
 
 def log(message):
@@ -44,25 +46,53 @@ def stream_file(fileName, escapeDigits):
         log("Result did not match regular expression")
     return response
 
-text=sys.argv[1]
+def logAllAgiVariablesAtStartup():
+    while True:
+        line = sys.stdin.readline().strip()
+        if len(line) == 0:
+            log("End of AGI environment variables at startup.")
+            break
+        log("AGI environment variables at startup: "+line)
+    return
+
+def assembleMessageFromChannelVariables():
+    i = 0
+    text = ""
+    while True:
+        response = agi_command("GET VARIABLE text" + str(i))
+        m = re.match("200 result=(-?\d+) \((.*)\)",response)
+        if m:
+            log("Matched the regular expression from response:" + response + " Group 1: '" + m.group(1) + "'" + " Group 2: '" + m.group(2) + "'")
+            text += " "
+            text += m.group(2)
+            i += 1
+        else:
+            log("Not a reg ex match from GET VARIABLE output. Response was: " + response)
+            break
+    return text
+
+logging.basicConfig(filename='/tmp/'+datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")+'.log', filemode='w', level=logging.INFO)
+
+logAllAgiVariablesAtStartup()
+
+text = assembleMessageFromChannelVariables()
+
+if len(text) == 0:
+    log("No text found in channel variables. Exiting")
+    logging.shutdown()
+    sys.exit()
+
+text = string.replace(text,"\,",",")
 rate = "medium"
-if len(sys.argv) == 4:
-    rate=sys.argv[3]
+if len(sys.argv) == 3:
+    rate=sys.argv[2]
     log("Rate is:"+rate)
 md5=hashlib.md5()
 md5.update(rate)
 md5.update(text);
-logging.basicConfig(filename='/tmp/'+md5.hexdigest()+'.log', filemode='w', level=logging.INFO)
-
-while True:
-    line = sys.stdin.readline().strip()
-    if len(line) == 0:
-        log("End of standard input at startup.")
-        break
-    log("Standard input at startup: "+line)
 escapeDigits=""
-if len(sys.argv) > 2:
-    escapeDigits=sys.argv[2]
+if len(sys.argv) > 1:
+    escapeDigits=sys.argv[1]
     log("Escape digits are:"+escapeDigits)
 fileName=md5.hexdigest()+".mp3"
 directory="/tmp/"
@@ -77,9 +107,9 @@ else:
     log("Recording does not exist. Contacting Ivona.com to create it. " + destinationFile)
     with open("/etc/aws.properties") as f:
         keys = f.readlines()
-    AWS_ACCESS_KEY = keys[0].strip('\n')
-    AWS_SECRET_KEY = keys[1].strip('\n')
-    voice = pyvona.create_voice(AWS_ACCESS_KEY, AWS_SECRET_KEY)
+    awsAccessKey = keys[0].strip('\n')
+    awsSecretKey = keys[1].strip('\n')
+    voice = pyvona.create_voice(awsAccessKey, awsSecretKey)
     #print(v.list_voices())
     voice.voice_name = "Salli"
     voice.speech_rate = rate
@@ -88,4 +118,5 @@ else:
     return_code = call(["/usr/bin/avconv","-loglevel","quiet","-y","-i",sourceFile,"-ar","8000","-ac","1","-ab","64",destinationFile])
     stream_file(destinationFile, escapeDigits)
 log("Exiting")
+logging.shutdown()
 sys.exit()
