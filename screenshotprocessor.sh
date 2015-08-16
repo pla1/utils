@@ -15,4 +15,5 @@ cp "$filePath" /tmp/ss/.
 newFilePath="/tmp/ss/$file"
 logger "$0 Processing $filePath to $newFilePath"
 convert "$newFilePath" \( -clone 0 -background black -shadow 80x3+0+8 \) -reverse -background none -layers merge +repage "$newFilePath"
+/usr/bin/notify-send "Screenshot ready" "File is $newFilePath"
 logger "$0 Screenshot ready $newFilePath"
