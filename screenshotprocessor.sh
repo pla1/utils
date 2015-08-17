@@ -7,6 +7,7 @@
 # incrontab entry sample below:
 # /home/user_joe/Pictures IN_CLOSE_WRITE /home/user_joe/utils/screenshotprocessor.sh $@/$#
 #
+export DISPLAY=:0
 filePath="$1"
 file=$(basename "$filePath")
 rm -rf /tmp/ss
@@ -15,5 +16,5 @@ cp "$filePath" /tmp/ss/.
 newFilePath="/tmp/ss/$file"
 logger "$0 Processing $filePath to $newFilePath"
 convert "$newFilePath" \( -clone 0 -background black -shadow 80x3+0+8 \) -reverse -background none -layers merge +repage "$newFilePath"
-/usr/bin/notify-send "Screenshot ready" "File is $newFilePath"
+/usr/bin/notify-send --icon=/usr/share/icons/Humanity/apps/48/gnome-screenshot.svg "Screenshot ready" "File is $newFilePath"
 logger "$0 Screenshot ready $newFilePath"
