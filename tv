@@ -11,13 +11,10 @@
 #
 # Uses mplayer. Change the last line in this script to your favorite media player.
 #
-CURLY="[{}]"
-CR="\n"
-BRACKETS="[\]\[]"
 IP=$(cat ~/.hdhrIpAddress)
 if [ -z "$IP" ]
 then
-  read -p "Key the IP address of the HDHomeRun and press ENTER " IP
+  read -p "Key the IP address of the HDHomeRun and press ENTER\n" IP
   echo "$IP" > ~/.hdhrIpAddress
 fi
 callSign="$1"
@@ -25,18 +22,20 @@ lineup=$(curl --silent "http://$IP/lineup.json")
 if [[ "$lineup" != *"GuideNumber"* ]]
 then
   rm -f ~/.hdhrIpAddress
-  echo -e "\n\nMissing channel lineup. Check the IP address $IP. Also make sure you have the latest firmware on your HDHomeRun device. https://www.silicondust.com/support/downloads/\n\n" 
+  echo -e "\n\nMissing channel lineup. Check the IP address $IP. Also make sure you have the latest firmware on your HDHomeRun device. https://www.silicondust.com/support/downloads/\n\n"
   exit 1
 fi
-newLineup="${lineup//$CURLY/$CR}"
-lineup="${newLineup//$BRACKETS/}"
-line=$(echo -e "$lineup" | grep -i "$callSign")
-if [ -z "$line" ]
+shopt -s nocasematch
+regex=",\"GuideName\":\"$callSign\",(\"HD\":[0-9]+,)?\"URL\":\"(http:\/\/[a-zA-Z0-9\/\.:]+)\"}"
+echo "REGEX: $regex"
+[[ $lineup =~ $regex ]]
+echo "BASH REMATCH GROUP 1 ${BASH_REMATCH[1]}"
+echo "BASH REMATCH GROUP 2 ${BASH_REMATCH[2]}"
+url="${BASH_REMATCH[2]}"
+if [ -z "$url" ]
 then
   echo "Call sign \"$callSign\" not found."
   exit 1
 fi
-urlString=$(echo "$line" | cut -d , -f3)
-url=$(echo "$urlString" | cut -d \" -f4)
 echo -e "\n\nPlaying $url\n\n"
-/usr/bin/mplayer "$url"
+/usr/bin/mplayer $url
