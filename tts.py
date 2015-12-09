@@ -1,6 +1,5 @@
 #!/usr/bin/python
 #
-# Asterisk AGI Python script.
 # Translates text to voice using Ivona.com service.
 # This should be called from an Asterisk dialplan.
 # The text should be in the call file as variables text0, text1, text2, etc...
