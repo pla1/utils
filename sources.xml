@@ -73,6 +73,12 @@ On a Linux system, stick this file in your ~/.xbmc/userdata directory.
             <allowsharing>true</allowsharing>
         </source>
         <source>
+            <name>NFL Standings</name>
+            <path pathversion="1">rss://xbmc-rocks.com/NFLstandings.rss</path>
+            <allowsharing>true</allowsharing>
+        </source>
+
+        <source>
             <name>NPR Arts &amp; Culture</name>
             <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&q=http://www.npr.org/rss/rss.php?id=1008</path>
             <allowsharing>true</allowsharing>
