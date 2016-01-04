@@ -1,6 +1,8 @@
 <!--
 XBMC / Kodi sources. 
-On a Linux system, stick this file in your ~/.xbmc/userdata directory. 
+On a Linux system, stick this file in your ~/.xbmc/userdata directory or 
+better yet make a symbolic link with something like the following command: 
+ln -s  ~/utils/sources.xml ~/.kodi/userdata/sources.xml 
 -->
 <sources>
     <programs>
