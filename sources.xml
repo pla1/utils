@@ -1,8 +1,8 @@
 <!--
-XBMC / Kodi sources. 
-On a Linux system, stick this file in your ~/.xbmc/userdata directory or 
-better yet make a symbolic link with something like the following command: 
-ln -s  ~/utils/sources.xml ~/.kodi/userdata/sources.xml 
+XBMC / Kodi sources.
+On a Linux system, stick this file in your ~/.xbmc/userdata directory or
+better yet make a symbolic link with something like the following command:
+ln -s  ~/utils/sources.xml ~/.kodi/userdata/sources.xml
 -->
 <sources>
     <programs>
@@ -65,8 +65,8 @@ ln -s  ~/utils/sources.xml ~/.kodi/userdata/sources.xml
             <path pathversion="1">rss://ubuntupodcast.org/feed/ogg</path>
             <allowsharing>true</allowsharing>
         </source>
-
     </music>
+
     <pictures>
         <default pathversion="1"></default>
         <source>
@@ -82,42 +82,42 @@ ln -s  ~/utils/sources.xml ~/.kodi/userdata/sources.xml
 
         <source>
             <name>NPR Arts &amp; Culture</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&q=http://www.npr.org/rss/rss.php?id=1008</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://www.npr.org/rss/rss.php?id=1008</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>NPR Digital Culture</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&q=http://www.npr.org/rss/rss.php?id=1049</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://www.npr.org/rss/rss.php?id=1049</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Reuters Environment</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&q=http://feeds.reuters.com/reuters/environment</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://feeds.reuters.com/reuters/environment</path>
             <allowsharing>true</allowsharing>
         </source>
          <source>
             <name>Reuters Oddly Enough News</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&q=http://feeds.reuters.com/reuters/oddlyEnoughNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://feeds.reuters.com/reuters/oddlyEnoughNews</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Reuters Sports News</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&q=http://feeds.reuters.com/reuters/sportsNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://feeds.reuters.com/reuters/sportsNews</path>
             <allowsharing>true</allowsharing>
         </source>
          <source>
             <name>Reuters Top Business</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&q=http://feeds.reuters.com/reuters/businessNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://feeds.reuters.com/reuters/businessNews</path>
             <allowsharing>true</allowsharing>
         </source>
        <source>
             <name>Reuters Technology News</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&q=http://feeds.reuters.com/reuters/technologyNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://feeds.reuters.com/reuters/technologyNews</path>
             <allowsharing>true</allowsharing>
-        </source>        
+        </source>
         <source>
             <name>Reuters Top News</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&q=http://feeds.reuters.com/reuters/topNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&destroy=yes&q=http://feeds.reuters.com/reuters/topNews</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
