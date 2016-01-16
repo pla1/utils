@@ -14,7 +14,7 @@
 IP=$(cat ~/.hdhrIpAddress)
 if [ -z "$IP" ]
 then
-  read -p "Key the IP address of the HDHomeRun and press ENTER\n" IP
+  read -p "Key the IP address of the HDHomeRun and press ENTER" IP
   echo "$IP" > ~/.hdhrIpAddress
 fi
 callSign="$1"
@@ -26,7 +26,7 @@ then
   exit 1
 fi
 shopt -s nocasematch
-regex=",\"GuideName\":\"$callSign\",(\"HD\":[0-9]+,)?\"URL\":\"(http:\/\/[a-zA-Z0-9\/\.:]+)\"}"
+regex=",\"GuideName\":\"$callSign ?\.*\",(\"HD\":[0-9]+,)?\"URL\":\"(http:\/\/[a-zA-Z0-9\/\.:]+)\"}"
 echo "REGEX: $regex"
 [[ $lineup =~ $regex ]]
 echo "BASH REMATCH GROUP 1 ${BASH_REMATCH[1]}"
