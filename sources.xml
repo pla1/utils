@@ -1,9 +1,3 @@
-<!--
-XBMC / Kodi sources.
-On a Linux system, stick this file in your ~/.xbmc/userdata directory or
-better yet make a symbolic link with something like the following command:
-ln -s  ~/utils/sources.xml ~/.kodi/userdata/sources.xml
--->
 <sources>
     <programs>
         <default pathversion="1"></default>
@@ -15,18 +9,18 @@ ln -s  ~/utils/sources.xml ~/.kodi/userdata/sources.xml
             <path pathversion="1">/home/htplainf/Videos/</path>
             <allowsharing>true</allowsharing>
         </source>
-        <source>
-            <name>Videos on server0</name>
-            <path pathversion="1">/mnt/server0/Videos/</path>
-            <allowsharing>true</allowsharing>
-        </source>
-
     </video>
     <music>
         <default pathversion="1"></default>
         <source>
+            <name>Stream from VLC on server0</name>
+            <path pathversion="1">udp://239.255.12.42:1234</path>
+            <allowsharing>true</allowsharing>
+        </source>
+
+        <source>
             <name>Android Buffet Oggcast</name>
-            <path pathversion="1">rss://www.androidbuffet.com/feed/oggcast</path>
+            <path pathversion="1">rss://www.androidbuffet.com/feed/oggcast/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
@@ -36,96 +30,92 @@ ln -s  ~/utils/sources.xml ~/.kodi/userdata/sources.xml
         </source>
         <source>
             <name>The Dick Turpin Road Show</name>
-            <path pathversion="1">rss://feeds.feedburner.com/tdtrs-ogg</path>
-            <allowsharing>true</allowsharing>
-        </source>
-        <source>
-            <name>Music on server0</name>
-            <path pathversion="1">/mnt/server0/Music/</path>
+            <path pathversion="1">rss://feeds.feedburner.com/tdtrs-ogg/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Linux Outlaws Oggcast</name>
-            <path pathversion="1">rss://feeds.feedburner.com/linuxoutlaws-ogg</path>
+            <path pathversion="1">rss://feeds.feedburner.com/linuxoutlaws-ogg/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>NPR Oggcast</name>
-            <path pathversion="1">rss://hackerpublicradio.org/hpr_ogg_rss.php</path>
+            <path pathversion="1">rss://hackerpublicradio.org/hpr_ogg_rss.php/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Rotten Tomatoes Podcast</name>
-            <path pathversion="1">rss://feeds.feedburner.com/RTPodcast</path>
+            <path pathversion="1">rss://feeds.feedburner.com/RTPodcast/</path>
             <allowsharing>true</allowsharing>
         </source>
-
         <source>
             <name>Ubuntu UK Oggcast</name>
-            <path pathversion="1">rss://ubuntupodcast.org/feed/ogg</path>
+            <path pathversion="1">rss://ubuntupodcast.org/feed/ogg/</path>
+            <allowsharing>true</allowsharing>
+        </source>
+        <source>
+            <name>server0: MythTV AV Media Server</name>
+            <path pathversion="1">upnp://acbfd8de-406c-4d44-8f4f-769bb12c0a6b/Music/</path>
             <allowsharing>true</allowsharing>
         </source>
     </music>
-
     <pictures>
         <default pathversion="1"></default>
         <source>
             <name>NFL</name>
-            <path pathversion="1">rss://xbmc-rocks.com/nfl.rss</path>
+            <path pathversion="1">rss://xbmc-rocks.com/nfl.rss/</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>NFL Standings</name>
-            <path pathversion="1">rss://xbmc-rocks.com/NFLstandings.rss</path>
+            <path pathversion="1">rss://xbmc-rocks.com/NFLstandings.rss/</path>
             <allowsharing>true</allowsharing>
         </source>
-
         <source>
             <name>NPR Arts &amp; Culture</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://www.npr.org/rss/rss.php?id=1008</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go/?invert=yes&amp;destroy=yes&amp;q=http://www.npr.org/rss/rss.php?id=1008</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>NPR Digital Culture</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://www.npr.org/rss/rss.php?id=1049</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go/?invert=yes&amp;destroy=yes&amp;q=http://www.npr.org/rss/rss.php?id=1049</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Reuters Environment</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://feeds.reuters.com/reuters/environment</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go/?invert=yes&amp;destroy=yes&amp;q=http://feeds.reuters.com/reuters/environment</path>
             <allowsharing>true</allowsharing>
         </source>
-         <source>
+        <source>
             <name>Reuters Oddly Enough News</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://feeds.reuters.com/reuters/oddlyEnoughNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go/?invert=yes&amp;destroy=yes&amp;q=http://feeds.reuters.com/reuters/oddlyEnoughNews</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Reuters Sports News</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://feeds.reuters.com/reuters/sportsNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go/?invert=yes&amp;destroy=yes&amp;q=http://feeds.reuters.com/reuters/sportsNews</path>
             <allowsharing>true</allowsharing>
         </source>
-         <source>
+        <source>
             <name>Reuters Top Business</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://feeds.reuters.com/reuters/businessNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go/?invert=yes&amp;destroy=yes&amp;q=http://feeds.reuters.com/reuters/businessNews</path>
             <allowsharing>true</allowsharing>
         </source>
-       <source>
+        <source>
             <name>Reuters Technology News</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&q=http://feeds.reuters.com/reuters/technologyNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go/?invert=yes&amp;destroy=yes&amp;q=http://feeds.reuters.com/reuters/technologyNews</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Reuters Top News</name>
-            <path pathversion="1">rss://xbmc-rocks.com/go?invert=yes&destroy=yes&destroy=yes&q=http://feeds.reuters.com/reuters/topNews</path>
+            <path pathversion="1">rss://xbmc-rocks.com/go/?invert=yes&amp;destroy=yes&amp;destroy=yes&amp;q=http://feeds.reuters.com/reuters/topNews</path>
             <allowsharing>true</allowsharing>
         </source>
         <source>
             <name>Time Of Day</name>
-            <path pathversion="1">rss://pla1.net/time.rss</path>
+            <path pathversion="1">rss://pla1.net/time.rss/</path>
             <allowsharing>true</allowsharing>
         </source>
-
     </pictures>
     <files>
         <default pathversion="1"></default>
