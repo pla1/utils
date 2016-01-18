@@ -1,0 +1,100 @@
+<html>
+<head>
+  <title>Kiosk</title>
+  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+  <script>
+  var params={};window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(str,key,value){params[key] = value;});
+  console.log("PARMS: " + JSON.stringify(params));
+  var state = params.state;
+  var city = params.city;
+  if (!Boolean(state)) {
+    state = 'SC';
+  }
+  if (!Boolean(city)) {
+    city = 'Summerville';
+  }
+  function dateRoutine() {
+    var mdate = new moment();
+    $('#dateDiv').text(mdate.format('dddd MMMM D, YYYY'));
+    $('#timeDiv').text(mdate.format('h:mm a'));
+  }
+  function weatherRoutine() {
+    var urlString = "http://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/"+state+"/"+city+".json";
+    console.log(urlString);
+    jQuery(document).ready(function($) {
+      $.ajax({
+        url : urlString,
+        dataType : "jsonp",
+        success : function(parsed_json) {
+          var city = parsed_json['location']['city'];
+          var state = parsed_json['location']['state'];
+          var temp_f = parsed_json['current_observation']['temp_f'];
+          $('#weatherDiv').html(city + ' ' +state + ' ' + temp_f + '&#x2109;').html();
+        }
+      });
+    });
+  }
+  function init() {
+    dateRoutine();
+    weatherRoutine();
+    var dateTimer = setInterval(dateRoutine, 60000);
+    var weatherTimer = setInterval(weatherRoutine, 1800000);
+    Prep();
+  }
+  </script>
+  <script src="moment.js"></script>
+  <script src="jquery-2.2.0.js"></script>
+  <style>
+  * {
+    font-family:'Ubuntu', sans-serif;
+    color:white;
+    background-color:black;
+    margin: 0;
+    padding: 0;
+    cursor: none;
+  }
+  #dateDiv, #timeDiv, #weatherDiv {
+    font-size:8em;
+    text-align: center;
+  }
+  #containerDiv {
+    position: fixed;
+  }
+  </style>
+</head>
+<body onload="init()">
+  <div id="containerDiv">
+    <div id="dateDiv"></div>
+    <div id="timeDiv"></div>
+    <div id="weatherDiv"></div>
+  </div>
+  <script>
+
+  function Prep(){
+    console.log("Prep random mover.");
+    window_Height = window.innerHeight;
+    window_Width = window.innerWidth;
+
+    image_Element = document.getElementById("containerDiv");
+    image_Height = image_Element.clientHeight;
+    image_Width = image_Element.clientWidth;
+    console.log("H: " + image_Height + " W: " + image_Width);
+
+    availSpace_V = window_Height - image_Height;
+    availSpace_H = window_Width - image_Width;
+
+    var changeInterval = 60000;
+    setInterval(moveImage, changeInterval);
+  }
+
+  function moveImage(){
+    console.log("moveImage");
+    var randNum_V = Math.round(Math.random() * availSpace_V);
+    var randNum_H = Math.round(Math.random() * availSpace_H);
+
+    image_Element.style.top = randNum_V + "px";
+    image_Element.style.left = randNum_H + "px";
+  }
+  </script>
+</body>
+</html>
