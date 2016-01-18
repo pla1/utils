@@ -29,7 +29,9 @@
           var city = parsed_json['location']['city'];
           var state = parsed_json['location']['state'];
           var temp_f = parsed_json['current_observation']['temp_f'];
+          var icon_url = parsed_json['current_observation']['icon_url'];
           $('#weatherDiv').html(city + ' ' +state + ' ' + temp_f + '&#x2109;').html();
+          dimensionSetup();
         }
       });
     });
@@ -39,8 +41,33 @@
     weatherRoutine();
     var dateTimer = setInterval(dateRoutine, 60000);
     var weatherTimer = setInterval(weatherRoutine, 1800000);
-    Prep();
   }
+  function dimensionSetup(){
+    console.log("Prep random mover.");
+    windowHeight = window.innerHeight;
+    windowWidth = window.innerWidth;
+
+    containerDiv = document.getElementById("containerDiv");
+    containerDivHeight = containerDiv.clientHeight;
+    containerDivWidth = containerDiv.clientWidth;
+
+    availableSpaceVertical = windowHeight - containerDivHeight;
+    availableSpaceHorizontal = windowWidth - containerDivWidth;
+    console.log("image height: " + containerDivHeight + " image width: " + containerDivWidth + " window height: " + windowHeight + " window width: " + windowWidth + " available space vertical: " + availableSpaceVertical + " available space horizontal: " + availableSpaceHorizontal);
+
+    var changeInterval = 60000;
+    setInterval(moveImage, changeInterval);
+  }
+
+  function moveImage(){
+    console.log("moveImage");
+    var randomVerticalPosition = Math.round(Math.random() * availableSpaceVertical);
+    var randomHorizontalPosition = Math.round(Math.random() * availableSpaceHorizontal);
+
+    containerDiv.style.top = randomVerticalPosition + "px";
+    containerDiv.style.left = randomHorizontalPosition + "px";
+  }
+
   </script>
   <script src="moment.js"></script>
   <script src="jquery-2.2.0.js"></script>
@@ -64,37 +91,9 @@
 </head>
 <body onload="init()">
   <div id="containerDiv">
-    <div id="dateDiv"></div>
-    <div id="timeDiv"></div>
-    <div id="weatherDiv"></div>
+    <div id="dateDiv">&nbsp;</div>
+    <div id="timeDiv">&nbsp;</div>
+    <div id="weatherDiv">&nbsp;</div>
   </div>
-  <script>
-
-  function Prep(){
-    console.log("Prep random mover.");
-    window_Height = window.innerHeight;
-    window_Width = window.innerWidth;
-
-    image_Element = document.getElementById("containerDiv");
-    image_Height = image_Element.clientHeight;
-    image_Width = image_Element.clientWidth;
-    console.log("H: " + image_Height + " W: " + image_Width);
-
-    availSpace_V = window_Height - image_Height;
-    availSpace_H = window_Width - image_Width;
-
-    var changeInterval = 60000;
-    setInterval(moveImage, changeInterval);
-  }
-
-  function moveImage(){
-    console.log("moveImage");
-    var randNum_V = Math.round(Math.random() * availSpace_V);
-    var randNum_H = Math.round(Math.random() * availSpace_H);
-
-    image_Element.style.top = randNum_V + "px";
-    image_Element.style.left = randNum_H + "px";
-  }
-  </script>
 </body>
 </html>
