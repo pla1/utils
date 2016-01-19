@@ -6,8 +6,6 @@
 #
 # This script lives here: https://github.com/pla1/utils/blob/master/speedtestLogger.sh
 #
-# speedtest-cli lives here: https://github.com/sivel/speedtest-cli
-#
 # Requires expect. sudo apt-get install expect
 #
 proc randomString len {
