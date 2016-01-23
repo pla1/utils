@@ -7,6 +7,7 @@
   console.log("PARMS: " + JSON.stringify(params));
   var state = params.state;
   var city = params.city;
+  var firstTime = true;
   if (!Boolean(state)) {
     state = 'SC';
   }
@@ -31,7 +32,9 @@
           var temp_f = parsed_json['current_observation']['temp_f'];
           var icon_url = parsed_json['current_observation']['icon_url'];
           $('#weatherDiv').html(city + ' ' +state + ' ' + temp_f + '&#x2109;').html();
-          dimensionSetup();
+          if (firstTime) {
+            dimensionSetup();
+          }
         }
       });
     });
@@ -44,6 +47,7 @@
   }
   function dimensionSetup(){
     console.log("Prep random mover.");
+    firstTime = false; 
     windowHeight = window.innerHeight;
     windowWidth = window.innerWidth;
 
