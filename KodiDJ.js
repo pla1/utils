@@ -34,7 +34,7 @@ function openWebSocket() {
         console.log("Artist: " + artist + " title: " + title);
         var text = "Now playing, " + title + " by " + artist;
         console.log(text);
-        var command = '/home/htplainf/asterisk-googletts/cli/googletts-cli.pl -t "' + text + '"';
+        var command = '~/asterisk-googletts/cli/googletts-cli.pl -t "' + text + '"';
         var exec = require('child_process').exec,child;
         child = exec(command,
           function (error, stdout, stderr) {
