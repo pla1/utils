@@ -29,7 +29,7 @@ function openWebSocket() {
     if (jsonObject.hasOwnProperty("result")) {
       var result = jsonObject.result;
       if (result.hasOwnProperty("songdetails")) {
-        var title = jsonObject.result.songdetails.title;
+        var title = jsonObject.result.songdetails.title.replace("Gov't","Government");
         var artist = jsonObject.result.songdetails.artist[0];
         console.log("Artist: " + artist + " title: " + title);
         var text = "Now playing, " + title + " by " + artist;
