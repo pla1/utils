@@ -21,7 +21,7 @@ curlOutput=$(/usr/bin/curl -v -i -F "filedata=@$newFilePath" "http://up.pla1.net
 logger "$0 $curlOutput"
 /usr/bin/python ~/utils/image2clipboard.py "$newFilePath"
 /usr/bin/notify-send --icon=/usr/share/icons/Humanity/apps/48/gnome-screenshot.svg "Screenshot ready" "File is $newFilePath"
-if [[ $curlOutput != *"Not an authorized IP address"*]]
+if [[ $curlOutput != *"Not an authorized IP address"* ]]
 then
   xdg-open http://l.pla1.net &
 fi
