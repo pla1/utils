@@ -12,7 +12,7 @@ do
     do
       directory="/tmp/markers/$scale/$file/$letter"
       mkdir -p "$directory"
-      wget --output-document="$directory/marker.png" "https://mts.googleapis.com/vt/icon/name=icons/spotlight/$file&text=A&psize=16&font=fonts/Roboto-Regular.ttf&color=ff000000&ax=44&ay=48&scale=$scale"
+      wget --output-document="$directory/marker.png" "https://mts.googleapis.com/vt/icon/name=icons/spotlight/$file&text=$letter&psize=16&font=fonts/Roboto-Regular.ttf&color=ff000000&ax=44&ay=48&scale=$scale"
     done
   done
 done
