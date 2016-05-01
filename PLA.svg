@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>PLA logo</title>
+  <desc>HTML image size is width: 160 height: 50</desc>
+  <defs>
+    <rect id="rectangle" x="0" y="0" width="50" height="50" fill="black" ></rect>
+  </defs>
+  <g>
+    <g>
+      <use xlink:href="#rectangle" />
+      <text x="9" y="43" font-size="50" fill="white" font-family="Arimo, Verdana, Arial, Helvetica, Times, serif">P</text>
+    </g>
+    <g>
+      <use xlink:href="#rectangle" x="55"/>
+      <text x="65" y="43" font-size="50" fill="white" font-family="Arimo, Verdana, Arial, Helvetica, Times, serif">L</text>
+    </g>
+    <g>
+      <use xlink:href="#rectangle" x="110"/>
+      <text x="119" y="43" font-size="50" fill="white" font-family="Arimo, Verdana, Arial, Helvetica, Times, serif">A</text>
+    </g>
+  </g>
+</svg>
