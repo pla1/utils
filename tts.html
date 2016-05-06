@@ -2,23 +2,36 @@
 <html>
 <head>
   <title>Text To Speech Test using SpeechSynthesisUtterance</title>
-  <script>
-  supportsSpeechSynthesis = function (){
-    return 'speechSynthesis' in window
+  <style>
+  body {
+    margin:10em;
+    font-family: Arimo, Verdana, Arial, Helvetica, Times, serif ;
   }
-  if (supportsSpeechSynthesis()) {
-    var tts = new SpeechSynthesisUtterance();
-    tts.lang = 'en-US';
-    var text = "This is a test of the emergency broadcast system.";
-    console.log("Say: '" + text + "'");
-    tts.text = text;
-    speechSynthesis.speak(tts);
-  } else {
-    alert("speechSynthesis not supported.");
+  </style>
+  <script>
+  function init() {
+    supportsSpeechSynthesis = function () {
+      var answer = 'speechSynthesis' in window;
+      var message = "<p>SpeechSynthesisUtterance supported: <b>" + answer + "</b></p><p>User agent: " + navigator.userAgent + ".</p><p><a href='" + location.href + "'>"+location.href+"</p>";
+      document.getElementById("messageId").innerHTML = message;
+      return answer;
+    }
+    if (supportsSpeechSynthesis()) {
+      var tts = new SpeechSynthesisUtterance();
+      tts.lang = 'en-US';
+      var text = "This is a test of the emergency broadcast system.";
+      console.log("Say: '" + text + "'");
+      tts.text = text;
+      speechSynthesis.speak(tts);
+    }
   }
   </script>
 </head>
-<body>
+<body onload="init()">
   <h1>Text To Speech Test using SpeechSynthesisUtterance</h1>
+  <div id="messageId"></div>
+  <p><a href="https://github.com/pla1/utils/blob/master/tts.html">View on this html source on Github</a></p>
+  <p><a href="https://github.com/pla1/SpeechSynthesisUtteranceInWebViewTest">View this Android project on Github</a></p>
+  </p>
 </body>
 </html>
