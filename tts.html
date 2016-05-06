@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text To Speech Test using SpeechSynthesisUtterance</title>
+  <script>
+  supportsSpeechSynthesis = function (){
+    return 'speechSynthesis' in window
+  }
+  if (supportsSpeechSynthesis()) {
+    var tts = new SpeechSynthesisUtterance();
+    tts.lang = 'en-US';
+    var text = "This is a test of the emergency broadcast system.";
+    console.log("Say: '" + text + "'");
+    tts.text = text;
+    speechSynthesis.speak(tts);
+  } else {
+    alert("speechSynthesis not supported.");
+  }
+  </script>
+</head>
+<body>
+  <h1>Text To Speech Test using SpeechSynthesisUtterance</h1>
+</body>
+</html>
