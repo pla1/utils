@@ -9,5 +9,6 @@ apt-get install clipit gimp hdhomerun-config openssh-server rdesktop git wiresha
 apt-get remove apport -y
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 dpkg -i google-chrome-stable_current_amd64.deb
+wget http://registry.gimp.org/files/arrow.scm /home/htplainf/.gimp-2.8/scripts/.
 echo -e "event=button[ /]power\naction=/sbin/poweroff" > /etc/acpi/events/powerbtn
 acpid restart
