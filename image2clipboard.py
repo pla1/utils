@@ -1,5 +1,7 @@
 #! /usr/bin/python
-
+#
+# Copy image to clipboard.
+#
 import pygtk
 pygtk.require('2.0')
 import gtk
