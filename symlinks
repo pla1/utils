@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Create some symbolic links
+#
+mkdir ~/bin
+ln -s ~/utils/ctrlv ~/bin/ctrlv
+ln -s ~/utils/ctrlc ~/bin/ctrlc
