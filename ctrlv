@@ -2,5 +2,8 @@
 # Paste from https://ip.pla1.net/Misc/Pastebin
 #
 text=$(curl --silent https://ip.pla1.net/Misc/Pastebin)
-hash clipit 2>/dev/null || echo "$text" | clipit
+if [ -f /usr/bin/clipit ]
+then
+  echo "$text" | clipit
+fi
 echo "$text"
