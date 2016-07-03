@@ -2,6 +2,16 @@
 #
 # Create some symbolic links
 #
-mkdir ~/bin
-ln -s ~/utils/ctrlv ~/bin/ctrlv
-ln -s ~/utils/ctrlc ~/bin/ctrlc
+if [ ! -d ~/bin ]
+then
+  mkdir ~/bin
+fi
+
+for command in ctrlv ctrlc mac
+do
+  if [ ! -f ~/bin/$command ]
+  then
+    echo "Creating symbolic link for command $command"
+    ln -s ~/utils/$command ~/bin/$command
+  fi
+done
