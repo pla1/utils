@@ -12,7 +12,7 @@
     var params = {};
     var latitude = 0;
     var longitued = 0;
-    var timezone = "EST";
+    var timezone = "America/New York";
     window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
       params[key] = value;
     });
@@ -41,6 +41,7 @@
     var chart;
 
     function dateRoutine() {
+      console.log("dateRoutine timezone: " + timezone);
       var mdate = new moment().tz(timezone);
       $('#dateDiv').text(mdate.format('dddd MMMM D, YYYY'));
       $('#timeDiv').text(mdate.format('h:mm a'));
@@ -58,7 +59,7 @@
             var state = parsed_json['location']['state'];
             latitude = parsed_json['location']['lat'];
             longitude = parsed_json['location']['lon'];
-            timezone = parsed_json['location']['tz_short'];
+            timezone = parsed_json['location']['tz_long'];
             var temp_f = parsed_json['current_observation']['temp_f'];
             var icon_url = parsed_json['current_observation']['icon_url'];
             chartData.setValue(0, 1, temp_f);
@@ -76,7 +77,7 @@
         ['Label', 'Value'],
         ['Temp', 0]
       ]);
-      if (window.innerWidth < 800) {
+      if (window.innerWidth < 800 || window.innerHeight < 800) {
         chartOptions.width = 300;
         chartOptions.height = 300;
       }
@@ -166,7 +167,7 @@
       width: 300px;
     }
 
-    @media (min-width: 800px) {
+    @media (min-width: 800px) and (min-height: 800px) {
       #dateDiv,
       #timeDiv {
         font-size: 170px;
