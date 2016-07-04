@@ -3,9 +3,12 @@
 <head>
   <title>Screensaver</title>
   <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDRz8NNcLA0SVI77ioz59v_lbfjEWmLq-o"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script>
     var params = {};
+    var latitude = 0;
+    var longitued = 0;
     window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
       params[key] = value;
     });
@@ -49,10 +52,13 @@
           success: function(parsed_json) {
             var city = parsed_json['location']['city'];
             var state = parsed_json['location']['state'];
+            latitude = parsed_json['location']['lat'];
+            longitude = parsed_json['location']['lon'];
             var temp_f = parsed_json['current_observation']['temp_f'];
             var icon_url = parsed_json['current_observation']['icon_url'];
             chartData.setValue(0, 1, temp_f);
             chart.draw(chartData, chartOptions);
+            showGoogleMaps();
           }
         });
       });
@@ -65,8 +71,8 @@
         ['Temp', 0]
       ]);
       if (window.innerWidth < 800) {
-        chartOptions.width=300;
-        chartOptions.height=300;
+        chartOptions.width = 300;
+        chartOptions.height = 300;
       }
       dateRoutine();
       weatherRoutine();
@@ -99,6 +105,29 @@
     google.charts.load('current', {
       'packages': ['gauge']
     });
+
+    function showGoogleMaps() {
+
+      var latLng = new google.maps.LatLng(latitude, longitude);
+
+      var mapOptions = {
+        zoom: 16, // initialize zoom level - the max value is 21
+        streetViewControl: false, // hide the yellow Street View pegman
+        scaleControl: true, // allow users to zoom the Google Map
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: latLng
+      };
+
+      map = new google.maps.Map(document.getElementById('mapDiv'), mapOptions);
+
+      // Show the default red marker at the location
+      marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        draggable: false,
+        animation: google.maps.Animation.DROP
+      });
+    }
     google.charts.setOnLoadCallback(init);
   </script>
   <script src="moment.js"></script>
@@ -123,13 +152,14 @@
     }
 
     #containerDiv {
+      z-index: 1;
       position: fixed;
     }
 
     #chartDiv {
       color: black;
-      width:300px;
-      width:300px;
+      width: 300px;
+      width: 300px;
     }
 
     @media (min-width: 800px) {
@@ -139,14 +169,24 @@
         text-align: center;
       }
       #chartDiv {
-        width:500px;
-        width:500px;
+        width: 500px;
+        width: 500px;
       }
+    }
+
+    #mapDiv {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
     }
   </style>
 </head>
 
 <body>
+  <div id="mapDiv"></div>
   <div id="containerDiv">
     <div id="dateDiv">&nbsp;</div>
     <div id="timeDiv">&nbsp;</div>
@@ -155,4 +195,3 @@
 </body>
 
 </html>
-
