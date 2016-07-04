@@ -1,111 +1,152 @@
 <html>
+
 <head>
   <title>Screensaver</title>
   <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script>
-  var params={};window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(str,key,value){params[key] = value;});
-  console.log("PARMS: " + JSON.stringify(params));
-  var state = params.state;
-  var city = params.city;
-  var firstTime = true;
-  if (!Boolean(state)) {
-    state = 'SC';
-  }
-  if (!Boolean(city)) {
-    city = 'Summerville';
-  }
-  function dateRoutine() {
-    var mdate = new moment();
-    $('#dateDiv').text(mdate.format('dddd MMMM D, YYYY'));
-    $('#timeDiv').text(mdate.format('h:mm a'));
-  }
-  function weatherRoutine() {
-    var urlString = "http://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/"+state+"/"+city+".json";
-    console.log(urlString);
-    jQuery(document).ready(function($) {
-      $.ajax({
-        url : urlString,
-        dataType : "jsonp",
-        success : function(parsed_json) {
-          var city = parsed_json['location']['city'];
-          var state = parsed_json['location']['state'];
-          var temp_f = parsed_json['current_observation']['temp_f'];
-          var icon_url = parsed_json['current_observation']['icon_url'];
-          $('#weatherDiv').html(city + ' ' +state + ' ' + temp_f + '&#x2109;').html();
-          if (firstTime) {
-            dimensionSetup();
-          }
-        }
-      });
+    var params = {};
+    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
+      params[key] = value;
     });
-  }
-  function init() {
-    dateRoutine();
-    weatherRoutine();
-    var dateTimer = setInterval(dateRoutine, 60000);
-    var weatherTimer = setInterval(weatherRoutine, 1800000);
-  }
-  function dimensionSetup(){
-    console.log("Prep random mover.");
-    firstTime = false; 
-    windowHeight = window.innerHeight;
-    windowWidth = window.innerWidth;
+    console.log("PARMS: " + JSON.stringify(params));
+    var state = params.state;
+    var city = params.city;
+    var firstTime = true;
+    if (!Boolean(state)) {
+      state = 'SC';
+    }
+    if (!Boolean(city)) {
+      city = 'Summerville';
+    }
 
-    containerDiv = document.getElementById("containerDiv");
-    containerDivHeight = containerDiv.clientHeight;
-    containerDivWidth = containerDiv.clientWidth;
+    var chartData;
+    var chartOptions = {
+      width: 400,
+      height: 400,
+      redFrom: 90,
+      redTo: 120,
+      yellowFrom: 0,
+      yellowTo: 50,
+      greenFrom: 51,
+      greenTo: 89
+    };
+    var chart;
 
-    availableSpaceVertical = windowHeight - containerDivHeight;
-    availableSpaceHorizontal = windowWidth - containerDivWidth;
-    console.log("image height: " + containerDivHeight + " image width: " + containerDivWidth + " window height: " + windowHeight + " window width: " + windowWidth + " available space vertical: " + availableSpaceVertical + " available space horizontal: " + availableSpaceHorizontal);
+    function dateRoutine() {
+      var mdate = new moment();
+      $('#dateDiv').text(mdate.format('dddd MMMM D, YYYY'));
+      $('#timeDiv').text(mdate.format('h:mm a'));
+    }
 
-    var changeInterval = 60000;
-    setInterval(moveImage, changeInterval);
-  }
+    function weatherRoutine() {
+      var urlString = "http://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/" + state + "/" + city + ".json";
+      console.log(urlString);
+      jQuery(document).ready(function($) {
+        $.ajax({
+          url: urlString,
+          dataType: "jsonp",
+          success: function(parsed_json) {
+            var city = parsed_json['location']['city'];
+            var state = parsed_json['location']['state'];
+            var temp_f = parsed_json['current_observation']['temp_f'];
+            var icon_url = parsed_json['current_observation']['icon_url'];
+            if (firstTime) {
+              dimensionSetup();
+            }
+            chartData.setValue(0, 1, temp_f);
+            chart.draw(chartData, chartOptions);
+          }
+        });
+      });
+    }
 
-  function moveImage(){
-    console.log("moveImage");
-    var randomVerticalPosition = Math.round(Math.random() * availableSpaceVertical);
-    var randomHorizontalPosition = Math.round(Math.random() * availableSpaceHorizontal);
+    function init() {
+      chart = new google.visualization.Gauge(document.getElementById('chartDiv'));
+      chartData = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['℉', 0]
+      ]);
+      dateRoutine();
+      weatherRoutine();
+      var dateTimer = setInterval(dateRoutine, 60000);
+      var weatherTimer = setInterval(weatherRoutine, 1800000);
+    }
 
-    containerDiv.style.top = randomVerticalPosition + "px";
-    containerDiv.style.left = randomHorizontalPosition + "px";
-  }
+    function dimensionSetup() {
+      console.log("Prep random mover.");
+      firstTime = false;
+      windowHeight = window.innerHeight;
+      windowWidth = window.innerWidth;
 
+      containerDiv = document.getElementById("containerDiv");
+      containerDivHeight = containerDiv.clientHeight;
+      containerDivWidth = containerDiv.clientWidth;
+
+      availableSpaceVertical = windowHeight - containerDivHeight;
+      availableSpaceHorizontal = windowWidth - containerDivWidth;
+      console.log("image height: " + containerDivHeight + " image width: " + containerDivWidth + " window height: " + windowHeight + " window width: " + windowWidth + " available space vertical: " + availableSpaceVertical +
+        " available space horizontal: " + availableSpaceHorizontal);
+
+      var changeInterval = 60000;
+      setInterval(moveImage, changeInterval);
+    }
+
+    function moveImage() {
+      console.log("moveImage");
+      var randomVerticalPosition = Math.round(Math.random() * availableSpaceVertical);
+      var randomHorizontalPosition = Math.round(Math.random() * availableSpaceHorizontal);
+
+      containerDiv.style.top = randomVerticalPosition + "px";
+      containerDiv.style.left = randomHorizontalPosition + "px";
+    }
+    google.charts.load('current', {
+      'packages': ['gauge']
+    });
+    google.charts.setOnLoadCallback(init);
   </script>
   <script src="moment.js"></script>
   <script src="jquery-2.2.0.js"></script>
   <style>
-  * {
-    font-family:'Ubuntu', sans-serif;
-    color:white;
-    background-color:black;
-    margin: 0;
-    padding: 0;
-    cursor: none;
-    font-size:130%
-  }
-
-  @media screen and (min-width: 800px) {
     * {
-      font-size:170%;
+      font-family: 'Ubuntu', sans-serif;
+      color: white;
+      background-color: black;
+      margin: 0;
+      padding: 0;
+      cursor: none;
     }
-  }
 
+    @media screen and (min-width: 800px) {
+      #dateDiv,
+      #timeDiv {
+        font-size: 170px;
+        text-align: center;
+      }
+    }
 
-  #dateDiv, #timeDiv, #weatherDiv {
-    text-align: center;
-  }
-  #containerDiv {
-    position: fixed;
-  }
+    #dateDiv,
+    #timeDiv {
+      font-size: 130px;
+      text-align: center;
+    }
+
+    #containerDiv {
+      position: fixed;
+    }
+
+    #chartDiv {
+      color: black;
+    }
   </style>
 </head>
-<body onload="init()">
+
+<body>
   <div id="containerDiv">
     <div id="dateDiv">&nbsp;</div>
     <div id="timeDiv">&nbsp;</div>
-    <div id="weatherDiv">&nbsp;</div>
+    <div id="chartDiv"></div>
   </div>
 </body>
+
 </html>
