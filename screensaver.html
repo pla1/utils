@@ -22,8 +22,8 @@
 
     var chartData;
     var chartOptions = {
-      width: 400,
-      height: 400,
+      width: 500,
+      height: 500,
       redFrom: 90,
       redTo: 120,
       yellowFrom: 0,
@@ -51,9 +51,6 @@
             var state = parsed_json['location']['state'];
             var temp_f = parsed_json['current_observation']['temp_f'];
             var icon_url = parsed_json['current_observation']['icon_url'];
-            if (firstTime) {
-              dimensionSetup();
-            }
             chartData.setValue(0, 1, temp_f);
             chart.draw(chartData, chartOptions);
           }
@@ -65,35 +62,34 @@
       chart = new google.visualization.Gauge(document.getElementById('chartDiv'));
       chartData = google.visualization.arrayToDataTable([
         ['Label', 'Value'],
-        ['℉', 0]
+        ['Temp', 0]
       ]);
+      if (window.innerWidth < 800) {
+        chartOptions.width=300;
+        chartOptions.height=300;
+      }
       dateRoutine();
       weatherRoutine();
       var dateTimer = setInterval(dateRoutine, 60000);
       var weatherTimer = setInterval(weatherRoutine, 1800000);
-    }
-
-    function dimensionSetup() {
-      console.log("Prep random mover.");
-      firstTime = false;
-      windowHeight = window.innerHeight;
-      windowWidth = window.innerWidth;
-
-      containerDiv = document.getElementById("containerDiv");
-      containerDivHeight = containerDiv.clientHeight;
-      containerDivWidth = containerDiv.clientWidth;
-
-      availableSpaceVertical = windowHeight - containerDivHeight;
-      availableSpaceHorizontal = windowWidth - containerDivWidth;
-      console.log("image height: " + containerDivHeight + " image width: " + containerDivWidth + " window height: " + windowHeight + " window width: " + windowWidth + " available space vertical: " + availableSpaceVertical +
-        " available space horizontal: " + availableSpaceHorizontal);
-
-      var changeInterval = 60000;
-      setInterval(moveImage, changeInterval);
+      var moveImageTimer = setInterval(moveImage, 60000);
     }
 
     function moveImage() {
       console.log("moveImage");
+      var windowHeight = window.innerHeight;
+      var windowWidth = window.innerWidth;
+
+      var containerDiv = document.getElementById("containerDiv");
+      var containerDivHeight = containerDiv.clientHeight;
+      var containerDivWidth = containerDiv.clientWidth;
+
+      var availableSpaceVertical = windowHeight - containerDivHeight;
+      var availableSpaceHorizontal = windowWidth - containerDivWidth;
+      console.log("container height: " + containerDivHeight + " container width: " + containerDivWidth + " window height: " + windowHeight +
+        " window width: " + windowWidth + " available space vertical: " + availableSpaceVertical +
+        " available space horizontal: " + availableSpaceHorizontal);
+
       var randomVerticalPosition = Math.round(Math.random() * availableSpaceVertical);
       var randomHorizontalPosition = Math.round(Math.random() * availableSpaceHorizontal);
 
@@ -117,18 +113,13 @@
       cursor: none;
     }
 
-    @media screen and (min-width: 800px) {
-      #dateDiv,
-      #timeDiv {
-        font-size: 170px;
-        text-align: center;
-      }
-    }
-
     #dateDiv,
     #timeDiv {
-      font-size: 130px;
-      text-align: center;
+      font-size: 60px;
+    }
+
+    #timeDiv {
+      float: right;
     }
 
     #containerDiv {
@@ -137,6 +128,20 @@
 
     #chartDiv {
       color: black;
+      width:300px;
+      width:300px;
+    }
+
+    @media (min-width: 800px) {
+      #dateDiv,
+      #timeDiv {
+        font-size: 170px;
+        text-align: center;
+      }
+      #chartDiv {
+        width:500px;
+        width:500px;
+      }
     }
   </style>
 </head>
@@ -150,3 +155,4 @@
 </body>
 
 </html>
+
