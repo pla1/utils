@@ -5,10 +5,14 @@
   <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDRz8NNcLA0SVI77ioz59v_lbfjEWmLq-o"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="moment.js"></script>
+  <script src="moment-timezone-with-data-2010-2020.js"></script>
+  <script src="jquery-2.2.0.js"></script>
   <script>
     var params = {};
     var latitude = 0;
     var longitued = 0;
+    var timezone = "EST";
     window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
       params[key] = value;
     });
@@ -37,7 +41,7 @@
     var chart;
 
     function dateRoutine() {
-      var mdate = new moment();
+      var mdate = new moment().tz(timezone);
       $('#dateDiv').text(mdate.format('dddd MMMM D, YYYY'));
       $('#timeDiv').text(mdate.format('h:mm a'));
     }
@@ -54,11 +58,13 @@
             var state = parsed_json['location']['state'];
             latitude = parsed_json['location']['lat'];
             longitude = parsed_json['location']['lon'];
+            timezone = parsed_json['location']['tz_short'];
             var temp_f = parsed_json['current_observation']['temp_f'];
             var icon_url = parsed_json['current_observation']['icon_url'];
             chartData.setValue(0, 1, temp_f);
             chart.draw(chartData, chartOptions);
             showGoogleMaps();
+            dateRoutine();
           }
         });
       });
@@ -74,7 +80,6 @@
         chartOptions.width = 300;
         chartOptions.height = 300;
       }
-      dateRoutine();
       weatherRoutine();
       var dateTimer = setInterval(dateRoutine, 60000);
       var weatherTimer = setInterval(weatherRoutine, 1800000);
@@ -111,7 +116,7 @@
       var latLng = new google.maps.LatLng(latitude, longitude);
 
       var mapOptions = {
-        zoom: 16, // initialize zoom level - the max value is 21
+        zoom: 5, // initialize zoom level - the max value is 21
         streetViewControl: false, // hide the yellow Street View pegman
         scaleControl: true, // allow users to zoom the Google Map
         mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -130,13 +135,12 @@
     }
     google.charts.setOnLoadCallback(init);
   </script>
-  <script src="moment.js"></script>
-  <script src="jquery-2.2.0.js"></script>
   <style>
     * {
       font-family: 'Ubuntu', sans-serif;
+      text-shadow: 2px 2px 8px black;
       color: white;
-      background-color: black;
+      # background-color: black;
       margin: 0;
       padding: 0;
       cursor: none;
