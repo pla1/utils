@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python
 #
 # Copy image to clipboard.
 #
@@ -11,10 +11,9 @@ import sys
 def copy_image(f):
     assert os.path.exists(f), "file does not exist"
     image = gtk.gdk.pixbuf_new_from_file(f)
-
+    print("Image file: {} Width: {} Height: {}".format(f,image.get_width(),image.get_height()))
     clipboard = gtk.clipboard_get()
     clipboard.set_image(image)
     clipboard.store()
-
 
 copy_image(sys.argv[1]);
