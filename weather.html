@@ -1,73 +1,132 @@
 <html>
 
 <head>
-  <title>Weather</title>
-  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDRz8NNcLA0SVI77ioz59v_lbfjEWmLq-o"></script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script src="moment.js"></script>
-  <script src="moment-timezone-with-data-2010-2020.js"></script>
-  <script src="jquery-2.2.0.js"></script>
-  <script>
-    var params = {};
-    var latitude = 0;
-    var longitued = 0;
-    var timezone = "America/New York";
-    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
-      params[key] = value;
-    });
-    console.log("PARMS: " + JSON.stringify(params));
-    var state = params.state;
-    var city = params.city;
-    var firstTime = true;
-    if (!Boolean(state)) {
-      state = 'SC';
-    }
-    if (!Boolean(city)) {
-      city = 'Summerville';
-    }
-
-    var chartData;
-    var chartOptions = {
-      width: 500,
-      height: 500,
-      redFrom: 90,
-      redTo: 120,
-      yellowFrom: 0,
-      yellowTo: 50,
-      greenFrom: 51,
-      greenTo: 89
-    };
-    var chart;
-
-    function dateRoutine() {
-      console.log("dateRoutine timezone: " + timezone);
-      var mdate = new moment().tz(timezone);
-      $('#dateDiv').text(mdate.format('dddd MMMM D, YYYY'));
-      $('#timeDiv').text(mdate.format('h:mm a'));
-    }
-
-    function weatherRoutine() {
-      var urlString = "http://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/" + state + "/" + city + ".json";
-      console.log(urlString);
-      jQuery(document).ready(function($) {
-        $.ajax({
-          url: urlString,
-          dataType: "jsonp",
-          success: function(parsed_json) {
-            var city = parsed_json['location']['city'];
-            var state = parsed_json['location']['state'];
-            latitude = parsed_json['location']['lat'];
-            longitude = parsed_json['location']['lon'];
-            timezone = parsed_json['location']['tz_long'];
-            var temp_f = parsed_json['current_observation']['temp_f'];
-            var icon_url = parsed_json['current_observation']['icon_url'];
-            chartData.setValue(0, 1, temp_f);
-            chart.draw(chartData, chartOptions);
-            showGoogleMaps();
-            dateRoutine();
-          }
+    <title>Weather</title>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMoS8znBZ_vdiIS49M1X170Y085vKDBOk"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="moment.js"></script>
+    <script src="moment-timezone-with-data-2010-2020.js"></script>
+    <script src="jquery-2.2.0.js"></script>
+    <script>
+        var weatherUrlString;
+        var params = {};
+        var latitude = 0;
+        var longitued = 0;
+        var timezone = "America/New York";
+        window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
+            params[key] = value;
         });
+        console.log("PARMS: " + JSON.stringify(params));
+        var state = params.state;
+        var city = params.city;
+        var firstTime = true;
+        if (!Boolean(state)) {
+            state = 'SC';
+        }
+        if (!Boolean(city)) {
+            city = 'Summerville';
+        }
+        weatherUrlString = "https://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/" + state + "/" + city + ".json";
+        var chartData;
+        var chartOptions = {
+            width: 500,
+            height: 500,
+            redFrom: 90,
+            redTo: 120,
+            yellowFrom: 0,
+            yellowTo: 50,
+            greenFrom: 51,
+            greenTo: 89
+        };
+        var chart;
+
+        function dateRoutine() {
+            console.log("dateRoutine timezone: " + timezone);
+            var mdate = new moment().tz(timezone);
+            $('#dateDiv').text(mdate.format('dddd MMMM D, YYYY'));
+            $('#timeDiv').text(mdate.format('h:mm a'));
+        }
+        function geoLocationRoutine() {
+          if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(geoLocationSuccess, geoLocationError);
+          } else {
+            weatherRoutine();
+          }
+        }
+        function geoLocationSuccess(position) {
+          console.log("geoLocationSuccess");
+          weatherUrlString = "https://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/" + position.coords.latitude + "," + position.coords.longitude + ".json";
+          weatherRoutine();
+        }
+        function geoLocationError() {
+          console.log("geoLocationError");
+          weatherRoutine();
+        }
+        function weatherRoutine() {
+            console.log(weatherUrlString);
+            jQuery(document).ready(function($) {
+                $.ajax({
+                    url: weatherUrlString,
+                    dataType: "jsonp",
+                    success: function(parsed_json) {
+                        var city = parsed_json['location']['city'];
+                        var state = parsed_json['location']['state'];
+                        latitude = parsed_json['location']['lat'];
+                        longitude = parsed_json['location']['lon'];
+                        timezone = parsed_json['location']['tz_long'];
+                        var temp_f = parsed_json['current_observation']['temp_f'];
+                        var icon_url = parsed_json['current_observation']['icon_url'];
+                        chartData.setValue(0, 1, temp_f);
+                        chart.draw(chartData, chartOptions);
+                        showGoogleMaps();
+                        dateRoutine();
+                    }
+                });
+            });
+        }
+
+        function init() {
+            chart = new google.visualization.Gauge(document.getElementById('chartDiv'));
+            chartData = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['Temp', 0]
+            ]);
+            if (window.innerWidth < 800 || window.innerHeight < 800) {
+                chartOptions.width = 300;
+                chartOptions.height = 300;
+            }
+            geoLocationRoutine();
+            var dateTimer = setInterval(dateRoutine, 60000);
+            var weatherTimer = setInterval(geoLocationRoutine, 1800000);
+            var moveImageTimer = setInterval(moveImage, 60000);
+        }
+
+        function moveImage() {
+            console.log("moveImage");
+            var windowHeight = window.innerHeight;
+            var windowWidth = window.innerWidth;
+
+            var containerDiv = document.getElementById("containerDiv");
+            var containerDivHeight = containerDiv.clientHeight;
+            var containerDivWidth = containerDiv.clientWidth;
+
+            var availableSpaceVertical = windowHeight - containerDivHeight;
+            var availableSpaceHorizontal = windowWidth - containerDivWidth;
+            console.log("container height: " + containerDivHeight + " container width: " + containerDivWidth + " window height: " + windowHeight +
+                " window width: " + windowWidth + " available space vertical: " + availableSpaceVertical +
+                " available space horizontal: " + availableSpaceHorizontal);
+
+            var randomVerticalPosition = Math.round(Math.random() * availableSpaceVertical);
+            var randomHorizontalPosition = Math.round(Math.random() * availableSpaceHorizontal);
+
+            containerDiv.style.top = randomVerticalPosition + "px";
+            containerDiv.style.left = randomHorizontalPosition + "px";
+        }
+        google.charts.load('current', {
+            'packages': ['gauge']
+        });
+<<<<<<< HEAD
       });
     }
 
@@ -188,15 +247,93 @@
       z-index: 0;
     }
   </style>
+=======
+
+        function showGoogleMaps() {
+
+            var latLng = new google.maps.LatLng(latitude, longitude);
+
+            var mapOptions = {
+                zoom: 5,
+                streetViewControl: false,
+                scaleControl: true, 
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                center: latLng
+            };
+
+            map = new google.maps.Map(document.getElementById('mapDiv'), mapOptions);
+
+            // Show the default red marker at the location
+            marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                draggable: false,
+                animation: google.maps.Animation.DROP
+            });
+        }
+        google.charts.setOnLoadCallback(init);
+    </script>
+    <style>
+        * {
+            font-family: 'Ubuntu', sans-serif;
+            text-shadow: 2px 2px 8px black;
+            color: white;
+            margin: 0;
+            padding: 0;
+            cursor: none;
+        }
+
+        #dateDiv,
+        #timeDiv {
+            font-size: 60px;
+        }
+
+        #timeDiv {
+            float: right;
+        }
+
+        #containerDiv {
+            z-index: 1;
+            position: fixed;
+        }
+
+        #chartDiv {
+            color: black;
+            width: 300px;
+            width: 300px;
+        }
+
+        @media (min-width: 800px) and (min-height: 800px) {
+            #dateDiv,
+            #timeDiv {
+                font-size: 170px;
+                text-align: center;
+            }
+            #chartDiv {
+                width: 500px;
+                width: 500px;
+            }
+        }
+
+        #mapDiv {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+    </style>
+>>>>>>> 3d5993b0af9b32bd3b6454fe4e6c1bba5d2340f9
 </head>
 
 <body>
-  <div id="mapDiv"></div>
-  <div id="containerDiv">
-    <div id="dateDiv">&nbsp;</div>
-    <div id="timeDiv">&nbsp;</div>
-    <div id="chartDiv"></div>
-  </div>
+    <div id="mapDiv"></div>
+    <div id="containerDiv">
+        <div id="dateDiv">&nbsp;</div>
+        <div id="timeDiv">&nbsp;</div>
+        <div id="chartDiv"></div>
+    </div>
 </body>
 
 </html>
