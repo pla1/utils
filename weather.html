@@ -117,9 +117,9 @@
       var latLng = new google.maps.LatLng(latitude, longitude);
 
       var mapOptions = {
-        zoom: 5, // initialize zoom level - the max value is 21
-        streetViewControl: false, // hide the yellow Street View pegman
-        scaleControl: true, // allow users to zoom the Google Map
+        zoom: 5, 
+        disableDefaultUI: true,
+        scaleControl: true, 
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         center: latLng
       };
