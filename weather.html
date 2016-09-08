@@ -1,216 +1,278 @@
 <html>
 
 <head>
-    <title>Weather</title>
-    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMoS8znBZ_vdiIS49M1X170Y085vKDBOk"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="moment.js"></script>
-    <script src="moment-timezone-with-data-2010-2020.js"></script>
-    <script src="jquery-2.2.0.js"></script>
-    <script>
-        var weatherUrlString;
-        var params = {};
-        var latitude = 0;
-        var longitued = 0;
-        var timezone = "America/New York";
-        window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
-            params[key] = value;
-        });
-        console.log("PARMS: " + JSON.stringify(params));
-        var state = params.state;
-        var city = params.city;
-        var firstTime = true;
-        if (!Boolean(state)) {
-            state = 'SC';
-        }
-        if (!Boolean(city)) {
-            city = 'Summerville';
-        }
-        weatherUrlString = "https://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/" + state + "/" + city + ".json";
-        var chartData;
-        var chartOptions = {
-            width: 500,
-            height: 500,
-            redFrom: 90,
-            redTo: 120,
-            yellowFrom: 0,
-            yellowTo: 50,
-            greenFrom: 51,
-            greenTo: 89
-        };
-        var chart;
+  <title>Weather - Temperature and Humidity Gauges on Google Maps</title>
+  <meta http-equiv="cache-control" content="max-age=0" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+  <meta http-equiv="pragma" content="no-cache" />
+  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMoS8znBZ_vdiIS49M1X170Y085vKDBOk"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="moment.js"></script>
+  <script src="moment-timezone-with-data-2010-2020.js"></script>
+  <script src="jquery-2.2.0.js"></script>
+  <script>
+    var weatherUrlString;
+    var params = {};
+    var latitude = 0;
+    var longitued = 0;
+    var timezone = "America/New York";
+    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
+      params[key] = value;
+    });
+    console.log("PARMS: " + JSON.stringify(params));
+    var state = params.state;
+    var city = params.city;
+    var country;
+    var firstTime = true;
+    if (!Boolean(state)) {
+      state = 'SC';
+    }
+    if (!Boolean(city)) {
+      city = 'Summerville';
+    }
+    weatherUrlString = "https://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/" + state + "/" + city + ".json";
+    var temperatureGaugeData;
+    var defaultWidthAndHeight = 350;
+    var imperialTemperatureGaugeOptions = {
+      min: -20,
+      max: 120,
+      width: defaultWidthAndHeight,
+      height: defaultWidthAndHeight,
+      redFrom: 90,
+      redTo: 120,
+      yellowFrom: -20,
+      yellowTo: 50,
+      greenFrom: 51,
+      greenTo: 89
+    };
+    var metricTemperatureGaugeOptions = {
+      min: -10,
+      max: 50,
+      width: defaultWidthAndHeight,
+      height: defaultWidthAndHeight,
+      redFrom: 32,
+      redTo: 50,
+      yellowFrom: -10,
+      yellowTo: 10,
+      greenFrom: 11,
+      greenTo: 31
+    };
+    var humidityGauge;
+    var humidityGaugeData;
+    var humidityGaugeOptions = {
+      width: defaultWidthAndHeight,
+      height: defaultWidthAndHeight,
+      redFrom: 80,
+      redTo: 100,
+      yellowFrom: 51,
+      yellowTo: 79,
+      greenFrom: 0,
+      greenTo: 50
+    };
+    var temperatureGauge;
+    var humidityGauge;
 
-        function dateRoutine() {
-            console.log("dateRoutine timezone: " + timezone);
-            var mdate = new moment().tz(timezone);
-            $('#dateDiv').text(mdate.format('dddd MMMM D, YYYY'));
-            $('#timeDiv').text(mdate.format('h:mm a'));
-        }
-        function geoLocationRoutine() {
-          if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(geoLocationSuccess, geoLocationError);
-          } else {
-            weatherRoutine();
+    function dateRoutine() {
+      console.log("dateRoutine timezone: " + timezone);
+      var mdate = new moment().tz(timezone);
+      $('#dateDiv').text(mdate.format('dddd MMMM D, YYYY'));
+      $('#timeDiv').text(mdate.format('h:mm a'));
+    }
+
+    function geoLocationRoutine() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(geoLocationSuccess, geoLocationError);
+      } else {
+        weatherRoutine();
+      }
+    }
+
+    function geoLocationSuccess(position) {
+      console.log("geoLocationSuccess");
+      weatherUrlString = "https://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/" + position.coords.latitude + "," + position.coords.longitude + ".json";
+      //weatherUrlString = "https://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/51.5085300,-0.1257400.json";
+      weatherRoutine();
+    }
+
+    function geoLocationError() {
+      console.log("geoLocationError");
+      weatherRoutine();
+    }
+
+    function weatherRoutine() {
+      console.log(weatherUrlString);
+      jQuery(document).ready(function($) {
+        $.ajax({
+          url: weatherUrlString,
+          dataType: "jsonp",
+          success: function(parsed_json) {
+            var city = parsed_json['location']['city'];
+            var state = parsed_json['location']['state'];
+            latitude = parsed_json['location']['lat'];
+            longitude = parsed_json['location']['lon'];
+            timezone = parsed_json['location']['tz_long'];
+            country = parsed_json['location']['country'];
+            var temp_f = parsed_json['current_observation']['temp_f'];
+            var temp_c = parsed_json['current_observation']['temp_c']
+            var relative_humidity = parsed_json['current_observation']['relative_humidity'];
+            relative_humidity = Number(relative_humidity.replace('%', ''));
+            var icon_url = parsed_json['current_observation']['icon_url'];
+            if (country == "US") {
+              temperatureGaugeData.setValue(0, 1, temp_f);
+              temperatureGauge.draw(temperatureGaugeData, imperialTemperatureGaugeOptions);
+            } else {
+              temperatureGaugeData.setValue(0, 1, temp_c);
+              temperatureGauge.draw(temperatureGaugeData, metricTemperatureGaugeOptions);
+            }
+            humidityGaugeData.setValue(0, 1, relative_humidity);
+            humidityGauge.draw(humidityGaugeData, humidityGaugeOptions);
+            showGoogleMaps();
+            dateRoutine();
           }
-        }
-        function geoLocationSuccess(position) {
-          console.log("geoLocationSuccess");
-          weatherUrlString = "https://api.wunderground.com/api/c95c41401f0043ad/geolookup/conditions/q/" + position.coords.latitude + "," + position.coords.longitude + ".json";
-          weatherRoutine();
-        }
-        function geoLocationError() {
-          console.log("geoLocationError");
-          weatherRoutine();
-        }
-        function weatherRoutine() {
-            console.log(weatherUrlString);
-            jQuery(document).ready(function($) {
-                $.ajax({
-                    url: weatherUrlString,
-                    dataType: "jsonp",
-                    success: function(parsed_json) {
-                        var city = parsed_json['location']['city'];
-                        var state = parsed_json['location']['state'];
-                        latitude = parsed_json['location']['lat'];
-                        longitude = parsed_json['location']['lon'];
-                        timezone = parsed_json['location']['tz_long'];
-                        var temp_f = parsed_json['current_observation']['temp_f'];
-                        var icon_url = parsed_json['current_observation']['icon_url'];
-                        chartData.setValue(0, 1, temp_f);
-                        chart.draw(chartData, chartOptions);
-                        showGoogleMaps();
-                        dateRoutine();
-                    }
-                });
-            });
-        }
-
-        function init() {
-            chart = new google.visualization.Gauge(document.getElementById('chartDiv'));
-            chartData = google.visualization.arrayToDataTable([
-                ['Label', 'Value'],
-                ['Temp', 0]
-            ]);
-            if (window.innerWidth < 800 || window.innerHeight < 800) {
-                chartOptions.width = 300;
-                chartOptions.height = 300;
-            }
-            geoLocationRoutine();
-            var dateTimer = setInterval(dateRoutine, 60000);
-            var weatherTimer = setInterval(geoLocationRoutine, 1800000);
-            var moveImageTimer = setInterval(moveImage, 60000);
-        }
-
-        function moveImage() {
-            console.log("moveImage");
-            var windowHeight = window.innerHeight;
-            var windowWidth = window.innerWidth;
-
-            var containerDiv = document.getElementById("containerDiv");
-            var containerDivHeight = containerDiv.clientHeight;
-            var containerDivWidth = containerDiv.clientWidth;
-
-            var availableSpaceVertical = windowHeight - containerDivHeight;
-            var availableSpaceHorizontal = windowWidth - containerDivWidth;
-            console.log("container height: " + containerDivHeight + " container width: " + containerDivWidth + " window height: " + windowHeight +
-                " window width: " + windowWidth + " available space vertical: " + availableSpaceVertical +
-                " available space horizontal: " + availableSpaceHorizontal);
-
-            var randomVerticalPosition = Math.round(Math.random() * availableSpaceVertical);
-            var randomHorizontalPosition = Math.round(Math.random() * availableSpaceHorizontal);
-
-            containerDiv.style.top = randomVerticalPosition + "px";
-            containerDiv.style.left = randomHorizontalPosition + "px";
-        }
-        google.charts.load('current', {
-            'packages': ['gauge']
         });
+      });
+    }
 
-        function showGoogleMaps() {
+    function getSize() {
+      var height = window.innerHeight / 3;
+      var width = window.innerWidth / 3;
+      console.log("Size: " + Math.min(height, width));
+      return Math.min(height, width);
+    }
 
-            var latLng = new google.maps.LatLng(latitude, longitude);
+    function init() {
+      temperatureGauge = new google.visualization.Gauge(document.getElementById('temperatureGaugeDiv'));
+      temperatureGaugeData = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['Temp', 0]
+      ]);
+      var size = getSize();
+      imperialTemperatureGaugeOptions.width = size;
+      metricTemperatureGaugeOptions.height = size;
+      humidityGaugeOptions.width = size;
+      humidityGaugeOptions.height = size;
+      humidityGauge = new google.visualization.Gauge(document.getElementById('humidityGaugeDiv'));
+      humidityGaugeData = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['Humidity', 0]
+      ]);
+      geoLocationRoutine();
+      var dateTimer = setInterval(dateRoutine, 60000);
+      var weatherTimer = setInterval(geoLocationRoutine, 1800000);
+      var moveImageTimer = setInterval(moveImage, 60000);
+    }
 
-            var mapOptions = {
-                zoom: 5,
-                disableDefaultUI: true,
-                scaleControl: true, 
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                center: latLng
-            };
+    function moveImage() {
+      console.log("moveImage");
+      var windowHeight = window.innerHeight;
+      var windowWidth = window.innerWidth;
 
-            map = new google.maps.Map(document.getElementById('mapDiv'), mapOptions);
+      var containerDiv = document.getElementById("containerDiv");
+      var containerDivHeight = containerDiv.clientHeight;
+      var containerDivWidth = containerDiv.clientWidth;
 
-            // Show the default red marker at the location
-            marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
-                draggable: false,
-                animation: google.maps.Animation.DROP
-            });
-        }
-        google.charts.setOnLoadCallback(init);
-    </script>
-    <style>
-        * {
-            font-family: 'Ubuntu', sans-serif;
-            text-shadow: 2px 2px 8px black;
-            color: white;
-            margin: 0;
-            padding: 0;
-            cursor: none;
-        }
+      var availableSpaceVertical = windowHeight - containerDivHeight;
+      var availableSpaceHorizontal = windowWidth - containerDivWidth;
+      console.log("container height: " + containerDivHeight + " container width: " + containerDivWidth + " window height: " + windowHeight +
+        " window width: " + windowWidth + " available space vertical: " + availableSpaceVertical +
+        " available space horizontal: " + availableSpaceHorizontal);
 
-        #dateDiv,
-        #timeDiv {
-            font-size: 60px;
-        }
+      var randomVerticalPosition = Math.round(Math.random() * availableSpaceVertical);
+      var randomHorizontalPosition = Math.round(Math.random() * availableSpaceHorizontal);
 
-        #timeDiv {
-            float: right;
-        }
+      containerDiv.style.top = randomVerticalPosition + "px";
+      containerDiv.style.left = randomHorizontalPosition + "px";
+    }
+    google.charts.load('current', {
+      'packages': ['gauge']
+    });
 
-        #containerDiv {
-            z-index: 1;
-            position: fixed;
-        }
+    function showGoogleMaps() {
 
-        #chartDiv {
-            color: black;
-            width: 300px;
-            width: 300px;
-        }
+      var latLng = new google.maps.LatLng(latitude, longitude);
 
-        @media (min-width: 800px) and (min-height: 800px) {
-            #dateDiv,
-            #timeDiv {
-                font-size: 170px;
-                text-align: center;
-            }
-            #chartDiv {
-                width: 500px;
-                width: 500px;
-            }
-        }
+      var mapOptions = {
+        zoom: 5,
+        disableDefaultUI: true,
+        scaleControl: true,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: latLng
+      };
 
-        #mapDiv {
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0;
-        }
-    </style>
+      map = new google.maps.Map(document.getElementById('mapDiv'), mapOptions);
+
+      // Show the default red marker at the location
+      marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        draggable: false,
+        animation: google.maps.Animation.DROP
+      });
+    }
+    google.charts.setOnLoadCallback(init);
+  </script>
+  <style>
+    * {
+      font-family: 'Ubuntu', sans-serif;
+      text-shadow: 2px 2px 8px black;
+      color: white;
+      margin: 0;
+      padding: 0;
+      cursor: none;
+    }
+
+    #dateDiv,
+    #timeDiv {
+      font-size: 60px;
+    }
+
+    #timeDiv {
+      float: right;
+    }
+
+    #containerDiv {
+      z-index: 1;
+      position: fixed;
+    }
+
+    #temperatureGaugeDiv {
+      color: black;
+    }
+
+    #humidityGaugeDiv {
+      color: black;
+    }
+
+    @media (min-width: 800px) and (min-height: 800px) {
+      #dateDiv,
+      #timeDiv {
+        font-size: 170px;
+        text-align: center;
+      }
+    }
+
+    #mapDiv {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+  </style>
 </head>
 
-<body>
-    <div id="mapDiv"></div>
-    <div id="containerDiv">
-        <div id="dateDiv">&nbsp;</div>
-        <div id="timeDiv">&nbsp;</div>
-        <div id="chartDiv"></div>
-    </div>
+<body background="loading_spinner.gif">
+  <div id="mapDiv"></div>
+  <div id="containerDiv">
+    <div id="dateDiv">&nbsp;</div>
+    <div id="timeDiv">&nbsp;</div>
+    <div id="temperatureGaugeDiv"></div>
+    <div id="humidityGaugeDiv"></div>
+  </div>
 </body>
 
 </html>
