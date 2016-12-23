@@ -1,0 +1,16 @@
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1'>
+    <text x="9" y="43">P</text>
+    <text x="65" y="43">L</text>
+    <text x="119" y="43">A</text>
+    <text x="9" y="90">e</text>
+    <text x="9" y="140">a</text>
+    <text x="9" y="190">c</text>
+    <text x="9" y="240">e</text>
+    <style>
+        <![CDATA[
+        text {
+            font: bold 55px Arial, Verdana, sans-serif;
+        }
+        ]]>
+    </style>
+</svg>

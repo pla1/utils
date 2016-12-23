@@ -1,0 +1,11 @@
+
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='1000' height='1000'>
+<title>A</title>
+<circle cx='500' cy='500' r='500' fill='black'/><text text-anchor='middle' alignment-baseline='central' x='500' y='500' fill='white'>A</text>
+<style><![CDATA[
+text{
+font: bold 1000px Verdana, Helvetica, Arial, sans-serif;
+}
+]]></style>
+</svg>
+
