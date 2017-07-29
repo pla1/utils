@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=CHSWX on Twitter
+Type=Application
+Icon=/home/htplainf/utils/chswx.png
+Exec=/usr/bin/google-chrome --app=https://twitter.com/search?f=tweets&vertical=default&q=chswx&src=typd
