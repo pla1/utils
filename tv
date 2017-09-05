@@ -34,8 +34,8 @@ echo "BASH REMATCH GROUP 2 ${BASH_REMATCH[2]}"
 url="${BASH_REMATCH[2]}"
 if [ -z "$url" ]
 then
-  echo "Call sign \"$callSign\" not found."
+  echo "Call sign \"$callSign\" not found. Check http://$IP/lineup.json"
   exit 1
 fi
 echo -e "\n\nPlaying $url\n\n"
-/usr/bin/vlc $url
+/usr/bin/cvlc --fullscreen $url

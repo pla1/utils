@@ -7,7 +7,7 @@ then
   mkdir ~/bin
 fi
 
-for command in ctrlv ctrlc mac
+for command in ctrlv ctrlc mac mute tv
 do
   if [ ! -f ~/bin/$command ]
   then
