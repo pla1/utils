@@ -20,6 +20,7 @@ do
     logger "$0 $msg"
     exit
   fi
-  echo "Sleeping. VIN $VIN still in transit according to $domainName. $(date)"
+  msg="Sleeping. VIN $VIN still in transit according to $domainName. $(date)"
+  logger "$0 $msg"
   sleep 10m
 done
