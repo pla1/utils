@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# Set window size to 1920x1080
+#
+if [ -z "$1" ]
+then
+  echo "Missing argument. Pass some window title text. Optionally the width and height"
+  exit -1
+fi
+height=1080
+width=1920
+if [ ! -z "$2" ]
+then
+  width="$2"
+fi
+if [ ! -z "$3" ]
+then
+  height="$3"
+fi
+wmctrl -a "$1" && wmctrl -r :ACTIVE: -e 0,-1,-1,$width,$height

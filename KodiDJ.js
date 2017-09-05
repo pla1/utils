@@ -11,7 +11,7 @@ var WebSocket = require('ws')
 
 function openWebSocket() {
   console.log("Attempt opening WebSocket.");
-  var ws = new WebSocket("ws://localhost:9090");
+  var ws = new WebSocket("ws://i3c:9090");
 
   ws.onerror = function(err) {
     console.log("ERROR: " + err);
