@@ -1,3 +1,2 @@
 #!/bin/bash
-/usr/bin/vlock -a -s
-
+/usr/bin/dm-tool lock
