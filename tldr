@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# Pass a command name to a tldr website for better command examples than man pages have. 
+#
+xdg-open https://tldr.ostera.io/$1
