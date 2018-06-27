@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Position windows on desktop.
+# Position windows on my work desktop.
 #
 /usr/bin/wmctrl -a 'troubles' -e '0,3260,1,600,415'
 /usr/bin/wmctrl -a 'Southeast Radar' -e '0,3260,475,600,560'
