@@ -12,3 +12,4 @@
 /usr/bin/wmctrl -a '— Atom' -e '0,965,540,1920,1080'
 /usr/bin/wmctrl -a 'Eclipse' -e '0,965,540,1920,1080'
 /usr/bin/wmctrl -a '- Google Chrome' -e '0,965,540,1920,1080'
+/usr/bin/wmctrl -a '- Google Chrome'
