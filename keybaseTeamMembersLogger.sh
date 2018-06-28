@@ -20,7 +20,11 @@ echo "Date: $yyyymmdd"
 filter="/keybase/team/$team/$team"
 filter+="_members_*.txt"
 echo "Filter: $filter"
-latestFile="$(ls -t $filter | head -1)"
+unset -v latestFile
+for file in $filter
+do
+  [[ $file -nt $latestFile ]] && latestFile=$file
+done
 echo "Latest file: \"$latestFile\""
 echo "Comparing files $latestFile to $temporaryFile"
 /usr/bin/diff "$latestFile" "$temporaryFile" > "$diffFile"
@@ -40,5 +44,6 @@ else
   newFile+=".txt"
   cp "$diffFile" "$newDiffFile"
   cp "$temporaryFile" "$newFile"
+  echo "Differences found between $latestFile and /tmp/keybase_members.txt Created new diff file: $newDiffFile"
   exit 0
 fi
