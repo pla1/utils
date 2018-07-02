@@ -11,11 +11,11 @@ url="$1"
 filename=$(basename "$url")
 echo "File: $filename"
 sudo apt install qemu-system-x86
-if [ ! -f "/tmp/$filename" ]
+if [ ! -f "$filename" ]
 then
-  wget -O "/tmp/$filename" "$1"
+  wget -O "$filename" "$1"
 fi
-rm -f /tmp/vm01disk
-qemu-img create -f raw /tmp/vm01disk 20G
-sudo qemu-system-x86_64 -vga virtio -enable-kvm -cdrom "/tmp/$filename" -smp 2 -m 2G -drive file=/tmp/vm01disk,format=raw & 
+rm -f vm01disk
+qemu-img create -f raw vm01disk 20G
+sudo qemu-system-x86_64 -vga virtio -enable-kvm -cdrom "$filename" -smp 2 -m 2G -drive file=vm01disk,format=raw &
 wmctrl -a QEMU -e '0,1,1,1920,1080'
