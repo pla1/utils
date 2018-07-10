@@ -1,6 +1,6 @@
 #!/usr/bin/expect
 #
-# Called from speedtestLogger.sh. 
+# Called from speedtestLogger.sh.
 #
 # Parses output from Linux commands dig, ping, wget, and iperf and uploads it to database table.
 #
@@ -57,7 +57,7 @@ set digMaximum 0
 set digReceived 0
 set digQueries 0
 set digServers {64.20.26.17 64.20.26.145}
-foreach digServer $digServers { 
+foreach digServer $digServers {
   set quantity 10
   set counter 0
   while { $counter < $quantity } {
@@ -68,11 +68,11 @@ foreach digServer $digServers {
     spawn dig @$digServer +trace +tcp "$fakeDomainName"
     expect -re ".*Received \[0-9\]+ bytes from .* in (\[0-9\]+) ms.*" {
       set digQueryTime $expect_out(1,string)
-      set digReceived [expr $digReceived+1] 
+      set digReceived [expr $digReceived+1]
       puts "QUERY TIME: $digQueryTime for query number: $counter Server: $digServer name: $fakeDomainName"
       if { $digQueryTime > $digMaximum } {
         set digMaximum $digQueryTime
-      } 
+      }
       if { $digQueryTime < $digMinimum || $digMinimum == 0 } {
         set digMinimum $digQueryTime
       }
@@ -101,7 +101,7 @@ expect -re ".*rtt min/avg/max/mdev = (\[0-9\]+\.\[0-9\]+)/(\[0-9\]+\.\[0-9\]+)/(
 }
 puts "PING TOTALS: $pingMinimum $pingAverage $pingMaximum $pingStandardDeviation"
 
-set timeout 600 
+set timeout 600
 
 spawn wget --output-document /tmp/test.mpg http://$server/10MB.mpg
 expect {
@@ -145,8 +145,8 @@ if {$dl100MBSeconds < 50} {
 	puts "1GB DL SECONDS: $dl1GBSeconds"
 }
 
-spawn iperf --port 5002 --udp --format k -c $server 
-expect -re ".*Server Report:.* (\[0-9\]+\.\[0-9\]+) Kbits/sec +(\[0-9\]+\.\[0-9\]+) ms +(\[0-9\]+)/ +(\[0-9\]+) " {
+spawn iperf --port 5002 --udp --format k -c $server
+expect -re " (\[0-9\]+\.?\[0-9\]*) Kbits/sec +(\[0-9\]+\.\[0-9\]+) ms +(\[0-9\]+)/ +(\[0-9\]+) " {
 	set iperfBandwidthUDP $expect_out(1,string)
 	set iperfJitterUDP $expect_out(2,string)
 	set iperfLostUDP $expect_out(3,string)
@@ -155,7 +155,7 @@ expect -re ".*Server Report:.* (\[0-9\]+\.\[0-9\]+) Kbits/sec +(\[0-9\]+\.\[0-9\
 puts "IPERF UDP BANDWIDTH $iperfBandwidthUDP JITTER: $iperfJitterUDP LOST: $iperfLostUDP TOTAL: $iperfTotalUDP"
 
 
-spawn iperf --port 5001 --format k -c $server 
+spawn iperf --port 5001 --format k -c $server
 expect -re ".* (\[0-9\]+\.\[0-9\]+) Kbits/sec.*" {
 	set iperfBandwidthTCP $expect_out(1,string)
 }
