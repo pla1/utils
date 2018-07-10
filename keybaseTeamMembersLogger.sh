@@ -4,7 +4,7 @@
 #
 function log() {
   logger "$0 $1"
-  log "$0 $1"
+  echo "$0 $1"
 }
 if [ "$#" -ne 1 ]; then
   log "Pass a team name. Example: ./keybaseTeamMembers.sh chstech"
