@@ -16,6 +16,7 @@ then
   log "Team directory /keybase/team/$team not found"
   exit -1
 fi
+ls -l "/keybase/team/$team"
 temporaryFile="/tmp/keybase_members.txt"
 diffFile="/tmp/keybase_members_diff.txt"
 yyyymmdd=$(date +%Y%m%d)

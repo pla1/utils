@@ -11,6 +11,8 @@
 /usr/bin/wmctrl -a 'Pluma' -e '0,1,1408,1000,750'
 /usr/bin/wmctrl -a '— Atom' -e '0,965,540,1920,1080'
 /usr/bin/wmctrl -a 'Eclipse' -e '0,965,540,1920,1080'
-/usr/bin/wmctrl -a 'MS SQL Server Status' -e '0,2276,1,985,930'
+/usr/bin/wmctrl -a 'MS SQL Server Status' -e '0,2276,1,950,930'
 /usr/bin/wmctrl -a '- Google Chrome' -e '0,965,540,1920,1080'
+/usr/bin/wmctrl -a 'Chat' -e '0,7,1049,520,1095'
 /usr/bin/wmctrl -a '- Google Chrome'
+
