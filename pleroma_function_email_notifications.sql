@@ -1,7 +1,7 @@
 /*
  PostgreSQL script to create function and trigger for Pleroma email notifications.
 
- ** This will break your Pleroma instance if you do this wrong. **
+ ** This will break your Pleroma instance if you do this wrong. This hasn't been thoroughly tested. You mileage may vary. **
 
  Prerequisites
  1. Mail installed and configured with these 3 commands in these exact locations: /usr/bin/mail, /bin/echo, /usr/bin/xxd
