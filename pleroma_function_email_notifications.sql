@@ -1,4 +1,6 @@
 /*
+ PostgreSQL script to create function and trigger for Pleroma email notifications. 
+
  ** This will break your Pleroma instance if you do this wrong. **
 
  Prerequisites
