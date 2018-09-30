@@ -6,7 +6,7 @@
  Prerequisites
  1. Mail installed and configured with these 3 commands in these exact locations: /usr/bin/mail, /bin/echo, /usr/bin/xxd
  2. To confirm your configuration you should receive an email from this command - `/bin/echo "68656c6c6f" | /usr/bin/xxd -r -p | /usr/bin/mail -s "test" "You@yourdomain.com"`
- 3. Must install this trigger as DB super user (postgres) command: `psql -f /tmp/pleroma_function_email_notifications.sql`
+ 3. You must install this trigger as DB super user (postgres) command: `psql -f /tmp/pleroma_function_email_notifications.sql`
 
 */
 
