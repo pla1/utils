@@ -4,8 +4,8 @@
  2. /usr/bin/mail
  3. /bin/echo
  4. /usr/bin/xxd
- 5. You should receive an email from this command with subject: test and body: hello - /bin/echo "68656c6c6f" | /usr/bin/xxd -r -p | /usr/bin/mail -s "test" "You@yourdomain.com"
- 6. Must install this trigger as DB super user (postgres)
+ 5. You should receive an email from this command with subject: test and body: hello - `/bin/echo "68656c6c6f" | /usr/bin/xxd -r -p | /usr/bin/mail -s "test" "You@yourdomain.com"`
+ 6. Must install this trigger as DB super user (postgres) command: `psql -f /tmp/pleroma_function_email_notifications.sql`
 */
 
 \c pleroma_dev
