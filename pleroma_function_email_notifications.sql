@@ -1,6 +1,6 @@
 /*
  Prerequisites
- 1. Mail install and configure.
+ 1. Mail installed and configured.
  2. /usr/bin/mail
  3. /bin/echo
  4. /usr/bin/xxd
