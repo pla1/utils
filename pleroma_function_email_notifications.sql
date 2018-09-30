@@ -1,4 +1,6 @@
 /*
+ ** This will break your Pleroma instance if you do this wrong. **
+
  Prerequisites
  1. Mail installed and configured.
  2. /usr/bin/mail
@@ -6,31 +8,24 @@
  4. /usr/bin/xxd
  5. You should receive an email from this command with subject: test and body: hello - `/bin/echo "68656c6c6f" | /usr/bin/xxd -r -p | /usr/bin/mail -s "test" "You@yourdomain.com"`
  6. Must install this trigger as DB super user (postgres) command: `psql -f /tmp/pleroma_function_email_notifications.sql`
+
 */
 
 \c pleroma_dev
 
 CREATE OR REPLACE FUNCTION function_notifications_email() RETURNS TRIGGER AS $$
 
-DECLARE content text;
-
-DECLARE pgm text;
-
-DECLARE mentionId text;
-
-DECLARE actor text;
-
-DECLARE emailAddress text;
-
-DECLARE rec record;
-
-DECLARE subject text;
-
-DECLARE fromName text;
-
-DECLARE body text;
-
-DECLARE htmlBreak text := '<br>' || E'\n';
+DECLARE
+  content text;
+  pgm text;
+  mentionId text;
+  actor text;
+  emailAddress text;
+  rec record;
+  subject text;
+  fromName text;
+  body text;
+  htmlBreak text := '<br>' || E'\n';
 
 BEGIN
 FOR rec IN SELECT a.DATA->'object'->>'actor' as actor,
