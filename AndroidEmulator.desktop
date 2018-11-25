@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Android Emulator
+Exec=/opt/Android/Sdk/emulator/emulator @Nexus_5X_Android_P_with_Goolge_Play_Store
+Icon=/home/htplainf/Pictures/logos/android.png
+Type=Application
+Categories=Android
+	
