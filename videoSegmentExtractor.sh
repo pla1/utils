@@ -13,6 +13,7 @@ clipLength=3
 rm -rf /tmp/vse
 mkdir /tmp/vse
 fileNumber=10000
+GOOGLE_MAPS_API_KEY=$(printenv GOOGLE_MAPS_API_KEY)
 for file in $files
 do
   videoLength=$(/usr/bin/ffprobe -i "$file" -show_entries format=duration -v quiet -of csv="p=0")
@@ -25,7 +26,20 @@ do
     outputFile="/tmp/vse/$fileNumber.mp4"
     echo "file '$outputFile'">>/tmp/vse/fileList.txt
     echo "Start: $startTime Output file: $outputFile"
-    ffmpeg  -hide_banner -loglevel panic -ss "$startTime" -t $clipLength -i "$file" -async 1 "$outputFile"
+    ffmpeg -y -ss "$startTime" -t $clipLength -i "$file" -codec copy -map 0:3 -f rawvideo /tmp/GOPR0001.bin
+    /home/htplainf/projects/go/bin/gopro2json -i /tmp/GOPR0001.bin -o "$outputFile".json
+    firstCoordinate=$(grep -Po '"lat":[0-9]+\.[0-9]+,"lon":-?[0-9]+\.[0-9]+' "$outputFile".json | head -1)
+    echo "First coordinate: $firstCoordinate"
+    if [ ! -z "$firstCoordinate" ]
+    then
+      latitude=$(echo "$firstCoordinate" | cut -d':' -f2 | cut -d',' -f1)
+      longitude=$(echo "$firstCoordinate" | cut -d':' -f3 | cut -d',' -f1)
+      wget "https://maps.googleapis.com/maps/api/staticmap?key=$GOOGLE_MAPS_API_KEY&size=400x400&markers=color:red%7Clabel:C%7C$latitude,$longitude" --output-document "$outputFile".png
+      convert "$outputFile".png -alpha on -channel a -evaluate multiply 0.65 +channel "$outputFile"_transparent.png
+      ffmpeg  -hide_banner -loglevel panic -ss "$startTime" -t $clipLength -i "$file" -i "$outputFile"_transparent.png -filter_complex "[0:v][1:v] overlay=0:680:enable='between(t,0,2)'" -pix_fmt yuv420p -c:a copy "$outputFile"
+    else
+      ffmpeg  -hide_banner -loglevel panic -ss "$startTime" -t $clipLength -i "$file" -c copy "$outputFile"
+    fi
     ((i+=300))
     ((fileNumber++))
   done
