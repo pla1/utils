@@ -34,7 +34,7 @@ do
     /home/htplainf/projects/go/bin/gopro2json -i /tmp/GOPR0001.bin -o "$outputFile".json
     firstCoordinate=$(grep -Po '"lat":[0-9]+\.[0-9]+,"lon":-?[0-9]+\.[0-9]+' "$outputFile".json | head -1)
     echo "First coordinate: $firstCoordinate"
-    if [ ! -z "$firstCoordinate" ]
+    if [ ! -z "$firstCoordinateXXX" ]
     then
       latitude=$(echo "$firstCoordinate" | cut -d':' -f2 | cut -d',' -f1)
       longitude=$(echo "$firstCoordinate" | cut -d':' -f3 | cut -d',' -f1)
@@ -44,7 +44,7 @@ do
         \( -clone 0,1 -compose DstOut -composite \) \
         \( -clone 0,1 -compose DstIn -composite \)  \
         -delete 0,1 circle.png
-      convert circle-1.png -alpha on -channel a -evaluate multiply 0.80 +channel "$outputFile"_transparent.png
+      convert circle-1.png -alpha on -channel a -evaluate multiply 0.90 +channel "$outputFile"_transparent.png
       ffmpeg  -hide_banner -loglevel panic -ss "$startTime" -t $clipLength -i "$file" -i "$outputFile"_transparent.png -filter_complex "[0:v][1:v] overlay=0:680" -pix_fmt yuv420p -c:a copy "$outputFile"
     else
       ffmpeg  -hide_banner -loglevel panic -ss "$startTime" -t $clipLength -i "$file" -c copy "$outputFile"
@@ -54,3 +54,4 @@ do
   done
 done
 ffmpeg -f concat -safe 0 -i /tmp/vse/fileList.txt -c copy /tmp/vse/final.mp4
+sh "$script"
