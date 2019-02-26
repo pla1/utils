@@ -1,0 +1,92 @@
+<!doctype html>
+<html data-ng-app="intranetModule" ng-controller="Controller">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF8">
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <style>
+
+    * {
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <div id='h1_div'></div>
+  <div id='chart_div'></div>
+  <pre id="log"></pre>
+  <script>
+    google.charts.load('current', {
+      packages: ['corechart', 'line']
+    });
+    var chart = null;
+    var chartDataTable = null;
+    var row = 0;
+    var regex = /([0-9]+)\..*time=([0-9\.]+) ms/g;
+    function drawChart() {
+      var firstTime = true;
+      chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      chartDataTable = new google.visualization.DataTable();
+      var formatter = new google.visualization.DateFormat({
+        pattern: 'hh:mm:ss a'
+      });
+      chartDataTable.addColumn('date', 'X');
+      chartDataTable.addColumn('number', 'Milliseconds');
+      var options = {
+        hAxis: {
+          title: 'Date'
+        },
+        vAxis: {
+          title: 'Millseconds'
+        },
+        explorer: {
+          axis: 'horizontal',
+          keepInBounds: 'true',
+          maxZoomIn: 0.01
+        },
+        legend: 'none',
+        height: 400,
+        width: window.innerWidth,
+        backgroundColor: '#ffffff'
+      };
+      var ws = new WebSocket(`ws://localhost:8080/`);
+      ws.onopen = function() {
+        log('CONNECT');
+      };
+      ws.onclose = function() {
+        log('DISCONNECT');
+      };
+      ws.onmessage = function(event) {
+        log('MESSAGE: ' + event.data);
+        if (firstTime) {
+          console.log('Set h1');
+          document.getElementById('h1_div').innerHTML = `<h1>${event.data}</h1>`;
+          firstTime=false;
+        }
+        var match = regex.exec(event.data);
+        if (match) {
+          var date = new Date(0);
+          date.setUTCSeconds(match[1]);
+          console.log(`${date} ${match[2]}`);
+          var milliseconds = match[2];
+          chartDataTable.addRows(1);
+          chartDataTable.setCell(row, 0, date);
+          chartDataTable.setCell(row, 1, milliseconds);
+          formatter.format(chartDataTable, 0);
+          chart.draw(chartDataTable, options);
+          row++;
+        }
+      };
+    }
+
+    function log(msg) {
+      console.log(msg);
+    }
+    google.charts.setOnLoadCallback(drawChart);
+  </script>
+
+
+</body>
+
+</html>
