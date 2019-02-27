@@ -2,15 +2,16 @@
 <html>
 <!--
 Uses websocketd - https://github.com/joewalnes/websocketd
-Donwdload this Bash script - https://github.com/pla1/utils/blob/master/pingRoutine.sh
+Download this Bash script - https://github.com/pla1/utils/blob/master/pinggraph.sh
 
-Execute: websocketd --port=8080 ./ping.sh 10.6.0.1
+Execute: websocketd --port=8080 ./pinggraph.sh 10.6.0.1 8.8.8.8
 
 Open browser to pinggraph.html
 
 
 
 -->
+
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF8">
   <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -32,31 +33,27 @@ Open browser to pinggraph.html
     var chart = null;
     var chartDataTable = null;
     var row = 0;
-    var regex = /([0-9]+)\..*time=([0-9\.?]+) ms/;
+    var regex = /([0-9]+)\..* from ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}).*time=([0-9\.?]+) ms/;
+
     function drawChart() {
-      var firstTime = true;
+      var ipAddresses = [];
       chart = new google.visualization.LineChart(document.getElementById('chart_div'));
       chartDataTable = new google.visualization.DataTable();
       var formatter = new google.visualization.DateFormat({
         pattern: 'hh:mm:ss a'
       });
       chartDataTable.addColumn('date', 'X');
-      chartDataTable.addColumn('number', 'Milliseconds');
       var options = {
         hAxis: {
           title: 'Date'
         },
-        vAxis: {
-          title: 'Millseconds'
-        },
         explorer: {
           axis: 'horizontal',
           keepInBounds: 'true',
-          maxZoomIn: 0.01
         },
-        legend: 'none',
+        interpolateNulls: true,
         height: 400,
-        width: window.innerWidth,
+        width: window.innerWidth - 50,
         backgroundColor: '#ffffff'
       };
       var ws = new WebSocket(`ws://localhost:8080/`);
@@ -67,22 +64,34 @@ Open browser to pinggraph.html
         log('DISCONNECT');
       };
       ws.onmessage = function(event) {
-        if (firstTime) {
-          console.log('Set h1');
-          document.getElementById('h1_div').innerHTML = `<h1>${event.data}</h1>`;
-          firstTime=false;
-        }
         var match = regex.exec(event.data);
         if (match) {
           var date = new Date(0);
           date.setUTCSeconds(match[1]);
-          console.log(`Match: ${event.data} Date: ${date} Milliseconds: ${match[2]}`);
-          var milliseconds = match[2];
+          var ipAddress = match[2];
+          var milliseconds = match[3];
+          console.log(`Match: ${event.data} Date: ${date} IP: ${ipAddress} Milliseconds: ${milliseconds}`);
+          var index = ipAddresses.indexOf(ipAddress);
+          if (index == -1) {
+            console.log(`Adding IP: ${ipAddress}`);
+            ipAddresses.push(ipAddress);
+            chartDataTable.addColumn('number', ipAddress);
+            index = ipAddresses.length - 1;
+            var html = '<h1>Round trip time to ';
+            for (var i = 0; i < ipAddresses.length; i++) {
+              html += ipAddresses[i];
+              if (i < ipAddresses.length -1) {
+                html += ', ';
+              }
+            }
+            html += '</h1>';
+            document.getElementById('h1_div').innerHTML = html;
+          }
           chartDataTable.addRows(1);
           chartDataTable.setCell(row, 0, date);
-          chartDataTable.setCell(row, 1, milliseconds);
+          chartDataTable.setCell(row, index + 1, milliseconds);
           formatter.format(chartDataTable, 0);
-          chart.draw(chartDataTable, options);
+          chart.draw(chartDataTable, google.charts.Line.convertOptions(options));
           row++;
         } else {
           console.log(`Not a match: ${event.data}`);
