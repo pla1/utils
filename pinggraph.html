@@ -32,7 +32,7 @@ Open browser to pinggraph.html
     var chart = null;
     var chartDataTable = null;
     var row = 0;
-    var regex = /([0-9]+)\..*time=([0-9\.]+) ms/g;
+    var regex = /([0-9]+)\..*time=([0-9\.?]+) ms/;
     function drawChart() {
       var firstTime = true;
       chart = new google.visualization.LineChart(document.getElementById('chart_div'));
@@ -67,7 +67,6 @@ Open browser to pinggraph.html
         log('DISCONNECT');
       };
       ws.onmessage = function(event) {
-        log('MESSAGE: ' + event.data);
         if (firstTime) {
           console.log('Set h1');
           document.getElementById('h1_div').innerHTML = `<h1>${event.data}</h1>`;
@@ -77,7 +76,7 @@ Open browser to pinggraph.html
         if (match) {
           var date = new Date(0);
           date.setUTCSeconds(match[1]);
-          console.log(`${date} ${match[2]}`);
+          console.log(`Match: ${event.data} Date: ${date} Milliseconds: ${match[2]}`);
           var milliseconds = match[2];
           chartDataTable.addRows(1);
           chartDataTable.setCell(row, 0, date);
@@ -85,6 +84,8 @@ Open browser to pinggraph.html
           formatter.format(chartDataTable, 0);
           chart.draw(chartDataTable, options);
           row++;
+        } else {
+          console.log(`Not a match: ${event.data}`);
         }
       };
     }
