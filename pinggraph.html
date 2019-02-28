@@ -70,7 +70,7 @@ Open browser to pinggraph.html
           date.setUTCSeconds(match[1]);
           var ipAddress = match[2];
           var milliseconds = match[3];
-          console.log(`Match: ${event.data} Date: ${date} IP: ${ipAddress} Milliseconds: ${milliseconds}`);
+      //    console.log(`Match: ${event.data} Date: ${date} IP: ${ipAddress} Milliseconds: ${milliseconds}`);
           var index = ipAddresses.indexOf(ipAddress);
           if (index == -1) {
             console.log(`Adding IP: ${ipAddress}`);
