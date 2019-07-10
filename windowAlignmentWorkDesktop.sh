@@ -15,4 +15,5 @@
 /usr/bin/wmctrl -a '- Google Chrome' -e '0,965,540,1920,1080'
 /usr/bin/wmctrl -a 'Chat' -e '0,7,1049,520,1095'
 /usr/bin/wmctrl -a 'Map'
+/usr/bin/wmctrl -a 'htplainf@skull-stony' -e '0,1920,1080,1920,1080'
 /usr/bin/wmctrl -a '- Google Chrome'
