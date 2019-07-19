@@ -4,7 +4,8 @@
 #
 recipients="patrick.archibald@gmail.com"
 outputFile="/tmp/output.pdf"
-/usr/local/bin/wkhtmltopdf "https://en.wikipedia.org/wiki/Portal:Arts" "$outputFile"
+url="https://en.wikipedia.org/wiki/Portal:Arts"
+/usr/local/bin/wkhtmltopdf "$url" "$outputFile"
 subject="wkhtmltopdf example - $(date) - $0"
-body="Scraped https://en.wikipedia.org/wiki/Main_Page"
+body="Scraped $url"
 echo "$body" | mail -s "$subject" "$recipients" -A "$outputFile"
