@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Rename MP4 files and upload to Google Drive
+#
+directory=$1
+if [ "$#" -ne 1 ]
+then
+  echo "Pass the directory containing the GoPro MP4 files."
+  exit -1
+fi
+/home/htplainf/projects/utils/dateifyFileNames.sh "$directory"
