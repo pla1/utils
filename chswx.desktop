@@ -1,5 +1,5 @@
 [Desktop Entry]
 Name=CHSWX on Twitter
 Type=Application
-Icon=/home/htplainf/utils/chswx.png
-Exec=/usr/bin/google-chrome --app=https://twitter.com/search?q=chswx&src=typd&f=live&vertical=default
+Icon=/home/htplainf/projects/utils/chswx.png
+Exec=/snap/bin/chromium --app='https://twitter.com/search?q=chswx&src=typd&f=live&vertical=default'
