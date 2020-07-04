@@ -6,6 +6,16 @@ directory=$1
 if [ "$#" -ne 1 ]
 then
   echo "Pass the directory containing the GoPro MP4 files."
-  exit -1
+  exit 1
 fi
 /home/htplainf/projects/utils/dateifyFileNames.sh "$directory"
+yyyymmdd=$(date +'%Y%m%d')
+output=$(/usr/local/bin/gdrive mkdir "$yyyymmdd" --parent '0B7u4TBGc-5Lma3hZVHAtYjFoUTg')
+echo "Output from mkdir command: $output"
+folder=$(echo "$output" | cut -d' ' -f2)
+echo "Folder: $folder"
+for file in $directory
+do
+  echo "Uploading $file"
+  /usr/local/bin/gdrive upload --parent "$folder" "$file"
+done

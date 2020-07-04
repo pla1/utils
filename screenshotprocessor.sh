@@ -15,7 +15,7 @@
 # Gdrive can be downloaded here: https://github.com/gdrive-org/gdrive
 #
 #
-logger "Start $1 $0"
+logger "Start $0 $1"
 export DISPLAY=:0
 filePath="$1"
 file=$(basename "$filePath")
@@ -35,5 +35,5 @@ echo "$viewUrl" > /tmp/viewUrl.txt
 /usr/bin/xclip -selection clipboard -target text/plain -in /tmp/viewUrl.txt
 sleep 1
 /usr/bin/xclip -selection clipboard -target image/png  -in "$newFilePath"
-/usr/bin/notify-send --icon=/usr/share/icons/Humanity/apps/48/gnome-screenshot.svg "Screenshot ready" "File is $newFilePath"
+/usr/bin/notify-send --icon="$newFilePath" "Screenshot ready" "File is $newFilePath"
 logger "Screenshot ready $newFilePath - $0"
