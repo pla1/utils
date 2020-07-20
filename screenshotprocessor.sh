@@ -23,7 +23,7 @@ rm -rf /tmp/ss
 mkdir /tmp/ss
 cp "$filePath" /tmp/ss/.
 newFilePath="/tmp/ss/$file"
-convert "$newFilePath" \( -clone 0 -background black -shadow 80x3+0+8 \) -reverse -background none -layers merge +repage label:"Screenshot by PLA $(date)" -background white -fill black -font Ubuntu -gravity Center -append "$newFilePath"
+convert "$newFilePath" \( -clone 0 -background black -shadow 80x3+0+8 \) -reverse -background none -layers merge +repage label:"Screenshot by PLA $(date)" -background white -fill white -font Ubuntu -gravity Center -append "$newFilePath"
 gdriveParentFolder=$(cat /etc/environment | grep GDRIVE_SCREENSHOT_FOLDER_ID | cut -d '=' -f2)
 logger "$0 gdrive parent folder $gdriveParentFolder"
 output=$(/usr/local/bin/gdrive upload --parent "$gdriveParentFolder" "$newFilePath")
