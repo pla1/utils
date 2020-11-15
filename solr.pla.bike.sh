@@ -9,10 +9,10 @@ SECONDS=0
 urls="$(/usr/bin/xpath  -q -e '//loc/text()' /tmp/plabikesitemap.xml)"
 for url in $urls
 do
-	if [[ "$url" =~ .*/[0-9]{8}/ ]]
+	if [[ "$url" =~ .*/[0-9]{8} ]]
 	then
 		echo "$url"
-		/opt/solr-7.6.0/bin/post -c bike -filestypes html "$url" -delay 1 -recursive 0
+		/opt/solr-7.6.0/bin/post -c bike -filestypes html "$url" -delay 0 -recursive 0
 	fi
 done
 logger "$0 Finished in $SECONDS seconds."
